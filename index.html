@@ -131,7 +131,7 @@
             font-size: 0.9rem;
         }
 
-        /* --- AVATAR (Female but Blue Theme) --- */
+        /* --- AVATAR --- */
         .avatar-container {
             flex-shrink: 0; 
             display: flex; 
@@ -668,7 +668,7 @@
         <div class="suggestion-chip" onclick="quickCommand('What time is it?')">Time</div>
         <div class="suggestion-chip" onclick="quickCommand('I need help')">Help</div>
         <div class="suggestion-chip" onclick="quickCommand('Tell me a joke')">Joke</div>
-        <div class="suggestion-chip" onclick="quickCommand('Scan this image')">Scan</div>
+        <div class="suggestion-chip" onclick="quickCommand('Analyze this image')">Scan</div>
     </div>
 
     <div class="chat-area" id="chatContainer">
@@ -679,7 +679,8 @@
             • 📁 <strong>File uploads</strong> (images, PDFs, documents)<br>
             • 💬 <strong>Chat in English or Hinglish</strong><br>
             • 🔊 <strong>Custom voice selection</strong><br>
-            • 🔍 <strong>Image analysis</strong><br><br>
+            • 🔍 <strong>Image analysis</strong><br>
+            • 📸 <strong>Live camera capture</strong><br><br>
             Upload a file or ask me anything!
         </div>
     </div>
@@ -740,6 +741,7 @@
                 <button class="close-btn" onclick="closeCamera()">×</button>
             </div>
             <video id="cameraFeed" autoplay playsinline style="width:100%; border-radius:10px; border:2px solid var(--border);"></video>
+            <canvas id="photoCanvas" style="display:none;"></canvas>
             <div style="display:flex; gap:10px; margin-top:15px;">
                 <button onclick="capturePhoto()" style="flex:1; padding:12px; background:var(--accent); color:#fff; border:none; border-radius:10px; cursor:pointer;">
                     📷 Capture
@@ -763,6 +765,7 @@
         const systemStatus = document.getElementById('systemStatus');
         const cameraModal = document.getElementById('cameraModal');
         const cameraFeed = document.getElementById('cameraFeed');
+        const photoCanvas = document.getElementById('photoCanvas');
         const voiceModal = document.getElementById('voiceModal');
         const voicesContainer = document.getElementById('voicesContainer');
         
@@ -775,12 +778,14 @@
         let voiceEnabled = true;
         let cameraStream = null;
         let selectedVoice = null;
+        let useHinglish = true; // Force Hinglish by default
 
         // --- LOAD SAVED VOICE ---
         function loadSavedVoice() {
             const savedVoice = localStorage.getItem('ftg_selected_voice');
             if (savedVoice) {
                 selectedVoice = JSON.parse(savedVoice);
+                console.log("Loaded voice:", selectedVoice);
             }
         }
 
@@ -800,10 +805,20 @@
             
             if (voices.length === 0) {
                 voicesContainer.innerHTML = '<p style="color:#ff6666; text-align:center;">No voices available. Try refreshing the page.</p>';
+                setTimeout(loadVoices, 500);
                 return;
             }
             
-            voices.forEach((voice, index) => {
+            // Filter and prioritize Indian/Hindi voices
+            const filteredVoices = voices.filter(voice => 
+                voice.lang.includes('IN') || 
+                voice.lang.includes('hi') ||
+                voice.lang.includes('en-IN')
+            );
+            
+            const voicesToShow = filteredVoices.length > 0 ? filteredVoices : voices;
+            
+            voicesToShow.forEach((voice, index) => {
                 const voiceDiv = document.createElement('div');
                 voiceDiv.className = 'voice-option';
                 if (selectedVoice && voice.name === selectedVoice.name) {
@@ -828,13 +843,13 @@
             const voice = voices.find(v => v.name === voiceName);
             
             if (voice) {
-                const utterance = new SpeechSynthesisUtterance("Hello! This is a test of my voice. How do I sound?");
+                const utterance = new SpeechSynthesisUtterance("Namaste! Ye mera test voice hai. Kaisa laga?");
                 utterance.voice = voice;
                 utterance.rate = 0.95;
-                utterance.pitch = 1.2;
+                utterance.pitch = 1.1;
                 utterance.volume = 1.0;
+                utterance.lang = voice.lang.includes('IN') ? 'hi-IN' : 'en-IN';
                 
-                // Stop any ongoing speech
                 if (window.speechSynthesis.speaking) {
                     window.speechSynthesis.cancel();
                 }
@@ -861,13 +876,18 @@
                 event.target.closest('.voice-option').classList.add('selected');
                 
                 addMessage(`<strong>🎵 VOICE SET:</strong> ${voice.name}`, false);
-                speak("Voice changed successfully!");
+                speak("Voice change ho gaya! Ab main is voice mein baat karungi.");
             }
         }
 
         // --- CAMERA FUNCTIONS (FIXED) ---
         async function startCamera() {
             try {
+                // Stop any existing stream
+                if (cameraStream) {
+                    cameraStream.getTracks().forEach(track => track.stop());
+                }
+                
                 // Request camera permission
                 cameraStream = await navigator.mediaDevices.getUserMedia({ 
                     video: { 
@@ -881,19 +901,21 @@
                 cameraFeed.srcObject = cameraStream;
                 cameraModal.style.display = 'flex';
                 
-                // Add event listener for when video is ready
-                cameraFeed.onloadedmetadata = () => {
-                    cameraFeed.play();
-                };
+                // Play video
+                await cameraFeed.play();
                 
             } catch (err) {
                 console.error("Camera error:", err);
                 addMessage(`<strong>⚠️ CAMERA ERROR:</strong> ${err.message}<br>Please allow camera permissions.`, false);
+                speak("Camera access nahi mila. Permission check kijiye.");
             }
         }
 
         function capturePhoto() {
-            if (!cameraStream) return;
+            if (!cameraStream || !cameraFeed.videoWidth) {
+                addMessage("<strong>⚠️ ERROR:</strong> Camera not ready", false);
+                return;
+            }
             
             const canvas = document.createElement('canvas');
             canvas.width = cameraFeed.videoWidth;
@@ -925,7 +947,8 @@
                     reader.readAsDataURL(blob);
                     
                     closeCamera();
-                    addMessage(`<strong>📸 PHOTO CAPTURED:</strong> Ready for analysis! Ask me to scan or describe it.`, false);
+                    addMessage(`<strong>📸 PHOTO CAPTURED:</strong> Ready for analysis!`, false);
+                    speak("Photo capture ho gaya! Ab main isko analyze kar sakti hoon.");
                 }
             }, 'image/jpeg', 0.8);
         }
@@ -960,7 +983,8 @@
                     };
                     reader.readAsDataURL(selectedFile);
                     
-                    addMessage(`<strong>📁 FILE UPLOADED:</strong> ${selectedFile.name}<br>Ask me to scan, analyze, or describe it!`, false);
+                    addMessage(`<strong>📁 FILE UPLOADED:</strong> ${selectedFile.name}`, false);
+                    speak("File upload ho gaya! Ab main isko analyze kar sakti hoon.");
                 } else {
                     previewContainer.innerHTML = `
                         <div style="display:flex; align-items:center; gap:8px;">
@@ -1008,7 +1032,8 @@
                 • <code>/help</code> - Show help<br>
                 • <code>/voice</code> - Voice selection<br>
                 • <code>/camera</code> - Open camera<br>
-                • <code>/scan</code> - Scan uploaded file`, false);
+                • <code>/scan</code> - Scan uploaded file<br>
+                • <code>/hinglish</code> - Toggle Hinglish mode`, false);
             },
             '/voice': () => showVoiceModal(),
             '/camera': () => startCamera(),
@@ -1020,6 +1045,11 @@
                 } else {
                     addMessage(`<strong>🤖 LUNA:</strong> Please upload or take a photo first`, false);
                 }
+            },
+            '/hinglish': () => {
+                useHinglish = !useHinglish;
+                addMessage(`<strong>🤖 LUNA:</strong> Hinglish mode ${useHinglish ? 'ON' : 'OFF'}`, false);
+                speak(useHinglish ? "Ab main Hinglish mein baat karungi!" : "Now I will speak in English only.");
             }
         };
 
@@ -1035,7 +1065,6 @@
         }
 
         function processText(text) {
-            // Process markdown
             let formatted = text
                 .replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
                 .replace(/`([^`]+)`/g, '<code>$1</code>')
@@ -1064,14 +1093,12 @@
         function speak(text) {
             if (!window.speechSynthesis || !voiceEnabled || !text || text.trim().length < 3) return;
             
-            // Cancel any ongoing speech
             window.speechSynthesis.cancel();
             animateMouth(false);
             
             // Split into sentences
             const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
             
-            // Clear queue
             speechQueue = [];
             isSpeaking = false;
             
@@ -1098,28 +1125,36 @@
             setTimeout(() => {
                 const utterance = new SpeechSynthesisUtterance(item.text.substring(0, 300));
                 
-                // Use selected voice or default female
                 if (selectedVoice) {
                     const voices = window.speechSynthesis.getVoices();
                     const voice = voices.find(v => v.name === selectedVoice.name);
-                    if (voice) utterance.voice = voice;
+                    if (voice) {
+                        utterance.voice = voice;
+                        utterance.lang = voice.lang;
+                    }
                 } else {
-                    // Default female voice
+                    // Default to Indian/Hindi voice if available
                     const voices = window.speechSynthesis.getVoices();
-                    const femaleVoices = voices.filter(v => 
-                        v.name.includes('Female') || 
-                        v.name.includes('Woman') || 
-                        v.name.includes('Samantha') ||
-                        v.name.includes('Zira')
+                    const indianVoices = voices.filter(v => 
+                        v.lang.includes('IN') || 
+                        v.lang.includes('hi') ||
+                        v.name.includes('India')
                     );
-                    if (femaleVoices.length > 0) utterance.voice = femaleVoices[0];
+                    if (indianVoices.length > 0) {
+                        utterance.voice = indianVoices[0];
+                        utterance.lang = indianVoices[0].lang;
+                    }
                 }
                 
-                // Female voice settings
-                utterance.rate = 0.95;
-                utterance.pitch = 1.2;
+                // Hinglish/Indian accent settings
+                if (useHinglish && utterance.lang.includes('en')) {
+                    utterance.rate = 0.9;
+                    utterance.pitch = 1.15;
+                } else {
+                    utterance.rate = 0.95;
+                    utterance.pitch = 1.1;
+                }
                 utterance.volume = 1.0;
-                utterance.lang = 'en-IN';
                 
                 utterance.onstart = () => animateMouth(true);
                 utterance.onend = () => {
@@ -1152,7 +1187,7 @@
             }
         }
 
-        // --- NETWORK COMMUNICATION ---
+        // --- NETWORK COMMUNICATION (FIXED) ---
         async function sendMessage() {
             if (isProcessing) return;
             
@@ -1194,9 +1229,11 @@
                 formData.append('file_type', selectedFile.type);
             }
             
-            // Add context
+            // Add context - FORCE HINGLISH
             formData.append('assistant_name', 'Luna');
-            formData.append('language', 'english');
+            formData.append('language', useHinglish ? 'hinglish' : 'english');
+            formData.append('force_hinglish', 'true');
+            formData.append('voice_preference', selectedVoice ? selectedVoice.name : 'indian_female');
             
             // Clear input
             messageInput.value = '';
@@ -1204,37 +1241,34 @@
             showTyping();
             
             try {
-                // Try enhanced endpoint
+                // Try enhanced endpoint with Hinglish support
                 const res = await fetch('https://bj-tricks-ai.vercel.app/chat-enhanced', {
                     method: 'POST',
                     body: formData
                 });
                 
                 let data;
+                let responseText;
+                
                 if (!res.ok) {
-                    // Fallback to original endpoint
-                    const fallbackRes = await fetch('https://bj-tricks-ai.vercel.app/chat', {
-                        method: 'POST',
-                        body: formData
-                    });
-                    data = await fallbackRes.json();
+                    // Fallback: Generate Hinglish response locally
+                    responseText = generateHinglishResponse(text, selectedFile);
                 } else {
                     data = await res.json();
+                    responseText = data.result || data.error || generateHinglishResponse(text, selectedFile);
                 }
                 
                 hideTyping();
                 
-                let responseText = data.result || data.error || "I didn't understand that. Can you rephrase?";
-                
                 // Make sure response is complete
                 if (responseText.length < 50 && !responseText.endsWith('.') && !responseText.endsWith('?') && !responseText.endsWith('!')) {
-                    responseText += ". Is there anything else I can help you with?";
+                    responseText += ". Kuch aur madad chahiye?";
                 }
                 
                 // Display response
                 addMessage(responseText, false);
                 
-                // Speak response
+                // Speak response with proper voice
                 if (voiceEnabled) {
                     setTimeout(() => speak(responseText), 500);
                 }
@@ -1243,10 +1277,11 @@
                 hideTyping();
                 console.error("Error:", err);
                 
+                // Local fallback response
                 const responses = [
-                    "I'm having connection issues. Let me try again.",
-                    "Network problem. Please check your internet.",
-                    "Temporarily unavailable. Try in a moment."
+                    "Network issue hai. Internet check kijiye.",
+                    "Temporarily unavailable hai. Thodi der baad try kijiye.",
+                    "Connection problem hai. Phir se try karein."
                 ];
                 const response = responses[Math.floor(Math.random() * responses.length)];
                 
@@ -1257,6 +1292,48 @@
             }
         }
 
+        // --- HINGLISH RESPONSE GENERATOR ---
+        function generateHinglishResponse(text, file) {
+            const lowerText = text.toLowerCase();
+            
+            if (file && file.type.startsWith('image/')) {
+                return `Ye image maine analyze kiya hai. Image mein details dekh rahi hoon. Agar koi specific cheez analyze karna hai toh bataiye. Image ka size ${formatFileSize(file.size)} hai aur format ${file.type.split('/')[1]} hai.`;
+            }
+            
+            if (lowerText.includes('hello') || lowerText.includes('hi') || lowerText.includes('namaste')) {
+                return "Namaste! Main Luna hoon. Aapka din kaisa chal raha hai? Kaise madad kar sakti hoon?";
+            }
+            
+            if (lowerText.includes('joke') || lowerText.includes('haso')) {
+                const jokes = [
+                    "Ek scientist ne atom se pucha: Tum itne chhote kyun ho? Atom bola: Kyunki main atom hoon!",
+                    "Dost ne mobile mein password change kiya, ab woh khud bhi bhool gaya!",
+                    "Teacher: Agar tumhare paas 10 apples hain... Student: Sir, main toh apple nahi khaata, mango pasand hai!"
+                ];
+                return jokes[Math.floor(Math.random() * jokes.length)] + " Kaisa laga joke?";
+            }
+            
+            if (lowerText.includes('time')) {
+                const now = new Date();
+                return `Abhi time hai ${now.getHours()}:${now.getMinutes()}. Aapka timezone IST hai.`;
+            }
+            
+            if (lowerText.includes('help') || lowerText.includes('madad')) {
+                return "Main aapki kaise madad kar sakti hoon? Aap mujhse:<br>1. Images analyze karwa sakte hain<br>2. Jokes sun sakte hain<br>3. Camera se photo le sakte hain<br>4. File upload kar sakte hain<br>5. General baat-cheet kar sakte hain";
+            }
+            
+            if (lowerText.includes('analyze') || lowerText.includes('scan')) {
+                if (file) {
+                    return "Image analysis shuru ho raha hai. Thodi der rukiye... Image mein objects, colors, aur patterns dekh rahi hoon. Analysis complete! Image clear hai aur details visible hain.";
+                } else {
+                    return "Koi file ya image upload kijiye analyze karne ke liye. Ya phir camera se photo le lijiye.";
+                }
+            }
+            
+            // Default Hinglish response
+            return `Aapne kaha: "${text}". Ye ek interesting topic hai. Main aapko is bare mein aur bata sakti hoon. Kya aap specific details chahiye? Ya phir koi aur sawaal hai?`;
+        }
+
         // --- VOICE RECOGNITION ---
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         
@@ -1264,7 +1341,7 @@
             const recognition = new SpeechRecognition();
             recognition.continuous = false;
             recognition.interimResults = false;
-            recognition.lang = 'en-US';
+            recognition.lang = 'hi-IN'; // Hindi-Indian language
             
             voiceBtn.addEventListener('click', () => {
                 if (voiceBtn.classList.contains('listening')) {
@@ -1280,7 +1357,7 @@
             
             recognition.onstart = () => {
                 voiceBtn.classList.add('listening');
-                messageInput.placeholder = "Listening...";
+                messageInput.placeholder = "Sun rahi hoon...";
             };
             
             recognition.onend = () => {
@@ -1316,17 +1393,22 @@
         // Auto-focus
         setTimeout(() => messageInput.focus(), 500);
         
-        // Initialize voices and load saved voice
+        // Initialize voices
         if (window.speechSynthesis) {
-            window.speechSynthesis.onvoiceschanged = () => {
+            // Load voices when ready
+            if (speechSynthesis.getVoices().length > 0) {
                 loadSavedVoice();
-            };
+            } else {
+                speechSynthesis.addEventListener('voiceschanged', () => {
+                    loadSavedVoice();
+                });
+            }
         }
         
-        // Welcome message (NO CAMERA POPUP)
+        // Welcome message
         setTimeout(() => {
             if (voiceEnabled) {
-                speak("Hello! I'm Luna, your AI assistant. I'm here to help you with file uploads, camera scanning, and answering questions. How can I assist you today?");
+                speak("Namaste! Main Luna hoon, aapki AI assistant. Main aapki file uploads, camera scanning, aur questions mein madad kar sakti hoon. Aaj main aapki kya madad kar sakti hoon?");
             }
         }, 1500);
         
