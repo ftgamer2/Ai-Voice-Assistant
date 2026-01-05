@@ -16,6 +16,8 @@
             --border: rgba(0, 176, 255, 0.3);
             --ai-color: #00b0ff;
             --user-color: #0066ff;
+            --error: #ff5555;
+            --success: #55ff55;
         }
 
         * { 
@@ -37,7 +39,6 @@
             position: relative;
         }
 
-        /* --- BACKGROUND FX --- */
         .grid-bg {
             position: fixed; 
             top: 0; 
@@ -250,19 +251,17 @@
             text-align: right;
         }
         
+        .msg.error {
+            align-self: flex-start; 
+            background: rgba(255, 85, 85, 0.15);
+            border: 1px solid var(--error); 
+            border-top-left-radius: 0; 
+            color: #ffe6e6;
+        }
+        
         .msg strong { 
             color: var(--primary); 
             font-weight: 700; 
-        }
-        
-        .msg em {
-            font-style: italic;
-            color: #aaccff;
-        }
-        
-        .msg del {
-            text-decoration: line-through;
-            color: #99ccff;
         }
         
         .msg pre { 
@@ -601,7 +600,6 @@
             } 
         }
 
-        /* --- MEDIA QUERIES --- */
         @media (min-width: 768px) {
             .avatar-ring { 
                 width: 110px; 
@@ -668,7 +666,7 @@
         <div class="suggestion-chip" onclick="quickCommand('What time is it?')">Time</div>
         <div class="suggestion-chip" onclick="quickCommand('I need help')">Help</div>
         <div class="suggestion-chip" onclick="quickCommand('Tell me a joke')">Joke</div>
-        <div class="suggestion-chip" onclick="quickCommand('Analyze this image')">Scan</div>
+        <div class="suggestion-chip" onclick="quickCommand('Scan this image')">Scan</div>
     </div>
 
     <div class="chat-area" id="chatContainer">
@@ -741,7 +739,6 @@
                 <button class="close-btn" onclick="closeCamera()">×</button>
             </div>
             <video id="cameraFeed" autoplay playsinline style="width:100%; border-radius:10px; border:2px solid var(--border);"></video>
-            <canvas id="photoCanvas" style="display:none;"></canvas>
             <div style="display:flex; gap:10px; margin-top:15px;">
                 <button onclick="capturePhoto()" style="flex:1; padding:12px; background:var(--accent); color:#fff; border:none; border-radius:10px; cursor:pointer;">
                     📷 Capture
@@ -765,7 +762,6 @@
         const systemStatus = document.getElementById('systemStatus');
         const cameraModal = document.getElementById('cameraModal');
         const cameraFeed = document.getElementById('cameraFeed');
-        const photoCanvas = document.getElementById('photoCanvas');
         const voiceModal = document.getElementById('voiceModal');
         const voicesContainer = document.getElementById('voicesContainer');
         
@@ -778,7 +774,8 @@
         let voiceEnabled = true;
         let cameraStream = null;
         let selectedVoice = null;
-        let useHinglish = true; // Force Hinglish by default
+        let useHinglish = true;
+        let availableVoices = [];
 
         // --- LOAD SAVED VOICE ---
         function loadSavedVoice() {
@@ -789,7 +786,7 @@
             }
         }
 
-        // --- VOICE SELECTION MODAL ---
+        // --- VOICE SELECTION MODAL (FIXED) ---
         function showVoiceModal() {
             voiceModal.style.display = 'flex';
             loadVoices();
@@ -800,61 +797,81 @@
         }
 
         function loadVoices() {
-            const voices = window.speechSynthesis.getVoices();
+            availableVoices = window.speechSynthesis.getVoices();
             voicesContainer.innerHTML = '';
             
-            if (voices.length === 0) {
+            if (availableVoices.length === 0) {
                 voicesContainer.innerHTML = '<p style="color:#ff6666; text-align:center;">No voices available. Try refreshing the page.</p>';
-                setTimeout(loadVoices, 500);
+                setTimeout(loadVoices, 1000);
                 return;
             }
             
-            // Filter and prioritize Indian/Hindi voices
-            const filteredVoices = voices.filter(voice => 
-                voice.lang.includes('IN') || 
-                voice.lang.includes('hi') ||
-                voice.lang.includes('en-IN')
-            );
+            // Group voices by language
+            const voiceGroups = {};
+            availableVoices.forEach(voice => {
+                const lang = voice.lang || 'unknown';
+                if (!voiceGroups[lang]) voiceGroups[lang] = [];
+                voiceGroups[lang].push(voice);
+            });
             
-            const voicesToShow = filteredVoices.length > 0 ? filteredVoices : voices;
-            
-            voicesToShow.forEach((voice, index) => {
-                const voiceDiv = document.createElement('div');
-                voiceDiv.className = 'voice-option';
-                if (selectedVoice && voice.name === selectedVoice.name) {
-                    voiceDiv.classList.add('selected');
-                }
+            // Create UI for each language group
+            Object.keys(voiceGroups).sort().forEach(lang => {
+                const groupDiv = document.createElement('div');
+                groupDiv.style.marginBottom = '15px';
+                groupDiv.innerHTML = `<div style="font-size:0.8rem; color:var(--primary); margin-bottom:5px; border-bottom:1px solid var(--border); padding-bottom:3px;">${lang}</div>`;
                 
-                voiceDiv.innerHTML = `
-                    <div class="voice-name">${voice.name}</div>
-                    <div class="voice-details">${voice.lang} • ${voice.default ? 'Default' : ''}</div>
-                    <div class="voice-controls">
-                        <button class="voice-test-btn" onclick="testVoice('${voice.name}')">Test</button>
-                        <button class="voice-select-btn" onclick="selectVoice('${voice.name}')">Select</button>
-                    </div>
-                `;
+                voiceGroups[lang].forEach(voice => {
+                    const voiceDiv = document.createElement('div');
+                    voiceDiv.className = 'voice-option';
+                    voiceDiv.dataset.voiceName = voice.name;
+                    
+                    if (selectedVoice && voice.name === selectedVoice.name) {
+                        voiceDiv.classList.add('selected');
+                    }
+                    
+                    voiceDiv.innerHTML = `
+                        <div class="voice-name">${voice.name}</div>
+                        <div class="voice-details">${voice.localService ? 'Local' : 'System'} • ${voice.default ? 'Default' : 'Standard'}</div>
+                        <div class="voice-controls">
+                            <button class="voice-test-btn" onclick="testVoice('${voice.name}')">Test</button>
+                            <button class="voice-select-btn" onclick="selectVoice('${voice.name}')">Select</button>
+                        </div>
+                    `;
+                    
+                    groupDiv.appendChild(voiceDiv);
+                });
                 
-                voicesContainer.appendChild(voiceDiv);
+                voicesContainer.appendChild(groupDiv);
             });
         }
 
         function testVoice(voiceName) {
+            // Stop any ongoing speech
+            if (window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+            }
+            
             const voices = window.speechSynthesis.getVoices();
             const voice = voices.find(v => v.name === voiceName);
             
             if (voice) {
-                const utterance = new SpeechSynthesisUtterance("Namaste! Ye mera test voice hai. Kaisa laga?");
+                const utterance = new SpeechSynthesisUtterance();
                 utterance.voice = voice;
-                utterance.rate = 0.95;
-                utterance.pitch = 1.1;
+                utterance.text = "Hello! This is a test of my voice. How do I sound?";
+                utterance.rate = 0.9;
+                utterance.pitch = 1.0;
                 utterance.volume = 1.0;
-                utterance.lang = voice.lang.includes('IN') ? 'hi-IN' : 'en-IN';
+                utterance.lang = voice.lang || 'en-US';
                 
-                if (window.speechSynthesis.speaking) {
-                    window.speechSynthesis.cancel();
-                }
+                // Add event listeners for debugging
+                utterance.onstart = () => console.log(`Testing voice: ${voice.name}`);
+                utterance.onend = () => console.log(`Voice test ended: ${voice.name}`);
+                utterance.onerror = (e) => console.error(`Voice test error: ${e.error}`, voice);
                 
                 window.speechSynthesis.speak(utterance);
+            } else {
+                console.error("Voice not found:", voiceName);
+                alert("Voice not found. Please try again.");
             }
         }
 
@@ -866,29 +883,30 @@
                 selectedVoice = voice;
                 localStorage.setItem('ftg_selected_voice', JSON.stringify({
                     name: voice.name,
-                    lang: voice.lang
+                    lang: voice.lang,
+                    voiceURI: voice.voiceURI
                 }));
                 
                 // Update UI
                 document.querySelectorAll('.voice-option').forEach(el => {
                     el.classList.remove('selected');
+                    if (el.dataset.voiceName === voiceName) {
+                        el.classList.add('selected');
+                    }
                 });
-                event.target.closest('.voice-option').classList.add('selected');
                 
-                addMessage(`<strong>🎵 VOICE SET:</strong> ${voice.name}`, false);
+                addMessage(`<strong>🎵 VOICE SET:</strong> ${voice.name} (${voice.lang})`, false);
                 speak("Voice change ho gaya! Ab main is voice mein baat karungi.");
             }
         }
 
-        // --- CAMERA FUNCTIONS (FIXED) ---
+        // --- CAMERA FUNCTIONS ---
         async function startCamera() {
             try {
-                // Stop any existing stream
                 if (cameraStream) {
                     cameraStream.getTracks().forEach(track => track.stop());
                 }
                 
-                // Request camera permission
                 cameraStream = await navigator.mediaDevices.getUserMedia({ 
                     video: { 
                         facingMode: 'environment',
@@ -901,7 +919,6 @@
                 cameraFeed.srcObject = cameraStream;
                 cameraModal.style.display = 'flex';
                 
-                // Play video
                 await cameraFeed.play();
                 
             } catch (err) {
@@ -922,15 +939,12 @@
             canvas.height = cameraFeed.videoHeight;
             const ctx = canvas.getContext('2d');
             
-            // Draw video frame to canvas
             ctx.drawImage(cameraFeed, 0, 0, canvas.width, canvas.height);
             
-            // Convert to blob
             canvas.toBlob(function(blob) {
                 if (blob) {
                     selectedFile = new File([blob], `camera_${Date.now()}.jpg`, { type: 'image/jpeg' });
                     
-                    // Show preview
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         previewContainer.innerHTML = `
@@ -961,12 +975,11 @@
             cameraModal.style.display = 'none';
         }
 
-        // --- FILE UPLOAD (FIXED) ---
+        // --- FILE UPLOAD ---
         function handleFileUpload(files) {
             if (files.length > 0) {
                 selectedFile = files[0];
                 
-                // Show preview for images
                 if (selectedFile.type.startsWith('image/')) {
                     const reader = new FileReader();
                     reader.onload = function(e) {
@@ -1053,6 +1066,22 @@
             }
         };
 
+        // --- CONTENT FILTER ---
+        function filterInappropriateContent(text) {
+            const inappropriateWords = [
+                'fuck', 'shit', 'asshole', 'bitch', 'dick', 'pussy', 'bastard', 'motherfucker',
+                'chutiya', 'bhosdike', 'madarchod', 'behenchod', 'lund', 'gaand', 'randi'
+            ];
+            
+            const lowerText = text.toLowerCase();
+            for (const word of inappropriateWords) {
+                if (lowerText.includes(word)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         // --- UI UTILITIES ---
         function showTyping() {
             typingInd.classList.add('active');
@@ -1078,9 +1107,13 @@
             return formatted;
         }
 
-        function addMessage(content, isUser) {
+        function addMessage(content, isUser, isError = false) {
             const div = document.createElement('div');
-            div.className = `msg ${isUser ? 'user' : 'ai'}`;
+            if (isError) {
+                div.className = 'msg error';
+            } else {
+                div.className = `msg ${isUser ? 'user' : 'ai'}`;
+            }
             div.innerHTML = processText(content);
             chatContainer.appendChild(div);
             
@@ -1096,7 +1129,6 @@
             window.speechSynthesis.cancel();
             animateMouth(false);
             
-            // Split into sentences
             const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
             
             speechQueue = [];
@@ -1125,34 +1157,45 @@
             setTimeout(() => {
                 const utterance = new SpeechSynthesisUtterance(item.text.substring(0, 300));
                 
+                // Get current voices
+                const voices = window.speechSynthesis.getVoices();
+                
                 if (selectedVoice) {
-                    const voices = window.speechSynthesis.getVoices();
-                    const voice = voices.find(v => v.name === selectedVoice.name);
+                    // Try to find the exact voice
+                    const voice = voices.find(v => 
+                        v.name === selectedVoice.name && 
+                        v.lang === selectedVoice.lang
+                    );
+                    
                     if (voice) {
                         utterance.voice = voice;
                         utterance.lang = voice.lang;
-                    }
-                } else {
-                    // Default to Indian/Hindi voice if available
-                    const voices = window.speechSynthesis.getVoices();
-                    const indianVoices = voices.filter(v => 
-                        v.lang.includes('IN') || 
-                        v.lang.includes('hi') ||
-                        v.name.includes('India')
-                    );
-                    if (indianVoices.length > 0) {
-                        utterance.voice = indianVoices[0];
-                        utterance.lang = indianVoices[0].lang;
+                    } else {
+                        // Fallback to any voice with same language
+                        const fallbackVoice = voices.find(v => v.lang === selectedVoice.lang);
+                        if (fallbackVoice) {
+                            utterance.voice = fallbackVoice;
+                            utterance.lang = fallbackVoice.lang;
+                        }
                     }
                 }
                 
-                // Hinglish/Indian accent settings
+                // If no voice selected or found, use default
+                if (!utterance.voice) {
+                    const defaultVoice = voices.find(v => v.default) || voices[0];
+                    if (defaultVoice) {
+                        utterance.voice = defaultVoice;
+                        utterance.lang = defaultVoice.lang;
+                    }
+                }
+                
+                // Hinglish settings
                 if (useHinglish && utterance.lang.includes('en')) {
-                    utterance.rate = 0.9;
-                    utterance.pitch = 1.15;
+                    utterance.rate = 0.85;
+                    utterance.pitch = 1.2;
                 } else {
-                    utterance.rate = 0.95;
-                    utterance.pitch = 1.1;
+                    utterance.rate = 0.9;
+                    utterance.pitch = 1.0;
                 }
                 utterance.volume = 1.0;
                 
@@ -1160,7 +1203,8 @@
                 utterance.onend = () => {
                     setTimeout(() => processSpeechQueue(), 300);
                 };
-                utterance.onerror = () => {
+                utterance.onerror = (e) => {
+                    console.error('Speech error:', e);
                     setTimeout(() => processSpeechQueue(), 300);
                 };
                 
@@ -1187,21 +1231,122 @@
             }
         }
 
-        // --- NETWORK COMMUNICATION (FIXED) ---
+        // --- IMAGE ANALYSIS ---
+        async function analyzeImage(file) {
+            return new Promise((resolve) => {
+                if (!file.type.startsWith('image/')) {
+                    resolve("This is not an image file. I can only analyze images.");
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        // Basic image analysis
+                        const analysis = {
+                            width: img.width,
+                            height: img.height,
+                            aspectRatio: (img.width / img.height).toFixed(2),
+                            size: formatFileSize(file.size),
+                            format: file.type.split('/')[1].toUpperCase(),
+                            colors: []
+                        };
+                        
+                        // Create canvas for color analysis
+                        const canvas = document.createElement('canvas');
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0);
+                        
+                        // Get dominant colors
+                        try {
+                            const imageData = ctx.getImageData(0, 0, 100, 100).data;
+                            const colorCount = {};
+                            for (let i = 0; i < imageData.length; i += 4) {
+                                const r = imageData[i];
+                                const g = imageData[i + 1];
+                                const b = imageData[i + 2];
+                                const color = `${r},${g},${b}`;
+                                colorCount[color] = (colorCount[color] || 0) + 1;
+                            }
+                            
+                            const sortedColors = Object.entries(colorCount)
+                                .sort((a, b) => b[1] - a[1])
+                                .slice(0, 3)
+                                .map(([color]) => color);
+                            
+                            analysis.colors = sortedColors;
+                        } catch (e) {
+                            console.log("Color analysis skipped:", e);
+                        }
+                        
+                        // Generate response
+                        let response = `📸 **IMAGE ANALYSIS COMPLETE:**\n\n`;
+                        response += `• **Dimensions:** ${analysis.width} × ${analysis.height} pixels\n`;
+                        response += `• **Aspect Ratio:** ${analysis.aspectRatio}\n`;
+                        response += `• **File Size:** ${analysis.size}\n`;
+                        response += `• **Format:** ${analysis.format}\n`;
+                        
+                        if (analysis.colors.length > 0) {
+                            response += `• **Dominant Colors:** RGB(${analysis.colors[0]})`;
+                            if (analysis.colors.length > 1) {
+                                response += `, RGB(${analysis.colors[1]})`;
+                            }
+                            if (analysis.colors.length > 2) {
+                                response += `, RGB(${analysis.colors[2]})`;
+                            }
+                            response += `\n`;
+                        }
+                        
+                        response += `\n**What would you like to know about this image?**\n`;
+                        response += `You can ask me to describe it, identify objects, or suggest edits.`;
+                        
+                        if (useHinglish) {
+                            response = `📸 **IMAGE ANALYSIS COMPLETE:**\n\n`;
+                            response += `• **Size:** ${analysis.width} × ${analysis.height} pixels\n`;
+                            response += `• **File ka size:** ${analysis.size}\n`;
+                            response += `• **Format:** ${analysis.format}\n\n`;
+                            response += `Image clear hai aur details visible hain. Kya aap iske bare mein kuch specific janana chahte hain?`;
+                        }
+                        
+                        resolve(response);
+                    };
+                    img.onerror = () => {
+                        resolve("Image load nahi ho payi. Kya aap dubara try karna chahenge?");
+                    };
+                    img.src = e.target.result;
+                };
+                reader.onerror = () => {
+                    resolve("File read nahi ho payi. Please try again.");
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // --- NETWORK COMMUNICATION ---
         async function sendMessage() {
             if (isProcessing) return;
             
             const text = messageInput.value.trim();
             if (!text && !selectedFile) return;
             
+            // Check for inappropriate content
+            if (filterInappropriateContent(text)) {
+                addMessage(`<strong>⚠️ CONTENT WARNING:</strong> Please maintain respectful conversation. I'm here to help you with genuine queries.`, false, true);
+                speak("Please use respectful language. Main aapki madad karne ke liye hoon.");
+                messageInput.value = '';
+                return;
+            }
+            
             // Check for commands
             if (text.startsWith('/')) {
                 const parts = text.split(' ');
                 const cmd = parts[0];
-                const arg = parts[1];
                 
                 if (commandShortcuts[cmd]) {
-                    commandShortcuts[cmd](arg);
+                    commandShortcuts[cmd]();
                     messageInput.value = '';
                     return;
                 }
@@ -1221,54 +1366,41 @@
                 addMessage(`📎 [File: ${selectedFile.name}]`, true);
             }
             
-            // Prepare form data
-            const formData = new FormData();
-            if (text) formData.append('text', text);
-            if (selectedFile) {
-                formData.append('file', selectedFile);
-                formData.append('file_type', selectedFile.type);
-            }
-            
-            // Add context - FORCE HINGLISH
-            formData.append('assistant_name', 'Luna');
-            formData.append('language', useHinglish ? 'hinglish' : 'english');
-            formData.append('force_hinglish', 'true');
-            formData.append('voice_preference', selectedVoice ? selectedVoice.name : 'indian_female');
-            
             // Clear input
             messageInput.value = '';
             
             showTyping();
             
             try {
-                // Try enhanced endpoint with Hinglish support
-                const res = await fetch('https://bj-tricks-ai.vercel.app/chat-enhanced', {
-                    method: 'POST',
-                    body: formData
-                });
+                let responseText = '';
                 
-                let data;
-                let responseText;
-                
-                if (!res.ok) {
-                    // Fallback: Generate Hinglish response locally
-                    responseText = generateHinglishResponse(text, selectedFile);
+                // Handle image analysis
+                if (selectedFile && selectedFile.type.startsWith('image/')) {
+                    if (text.toLowerCase().includes('analyze') || 
+                        text.toLowerCase().includes('scan') || 
+                        text.toLowerCase().includes('batao') ||
+                        text.toLowerCase().includes('kya hora')) {
+                        
+                        responseText = await analyzeImage(selectedFile);
+                        
+                    } else {
+                        // Generic image response
+                        responseText = useHinglish 
+                            ? `Aapne image upload ki hai. Image ka naam ${selectedFile.name} hai. Kya aap isko analyze karna chahte hain? "Scan this image" ya "Batao isme kya hai" bolein.`
+                            : `You've uploaded an image named ${selectedFile.name}. Would you like me to analyze it? Say "Scan this image" or "What's in this image?".`;
+                    }
+                    
                 } else {
-                    data = await res.json();
-                    responseText = data.result || data.error || generateHinglishResponse(text, selectedFile);
+                    // Text-only response
+                    responseText = generateSmartResponse(text, selectedFile);
                 }
                 
                 hideTyping();
                 
-                // Make sure response is complete
-                if (responseText.length < 50 && !responseText.endsWith('.') && !responseText.endsWith('?') && !responseText.endsWith('!')) {
-                    responseText += ". Kuch aur madad chahiye?";
-                }
-                
                 // Display response
                 addMessage(responseText, false);
                 
-                // Speak response with proper voice
+                // Speak response
                 if (voiceEnabled) {
                     setTimeout(() => speak(responseText), 500);
                 }
@@ -1277,13 +1409,9 @@
                 hideTyping();
                 console.error("Error:", err);
                 
-                // Local fallback response
-                const responses = [
-                    "Network issue hai. Internet check kijiye.",
-                    "Temporarily unavailable hai. Thodi der baad try kijiye.",
-                    "Connection problem hai. Phir se try karein."
-                ];
-                const response = responses[Math.floor(Math.random() * responses.length)];
+                const response = useHinglish 
+                    ? "Mujhe temporary issue aa raha hai. Thodi der baad try karein."
+                    : "I'm having a temporary issue. Please try again in a moment.";
                 
                 addMessage(response, false);
                 if (voiceEnabled) speak(response);
@@ -1292,46 +1420,104 @@
             }
         }
 
-        // --- HINGLISH RESPONSE GENERATOR ---
-        function generateHinglishResponse(text, file) {
+        // --- SMART RESPONSE GENERATOR ---
+        function generateSmartResponse(text, file) {
             const lowerText = text.toLowerCase();
             
-            if (file && file.type.startsWith('image/')) {
-                return `Ye image maine analyze kiya hai. Image mein details dekh rahi hoon. Agar koi specific cheez analyze karna hai toh bataiye. Image ka size ${formatFileSize(file.size)} hai aur format ${file.type.split('/')[1]} hai.`;
-            }
-            
+            // Handle greeting
             if (lowerText.includes('hello') || lowerText.includes('hi') || lowerText.includes('namaste')) {
-                return "Namaste! Main Luna hoon. Aapka din kaisa chal raha hai? Kaise madad kar sakti hoon?";
+                return useHinglish 
+                    ? "Namaste! Main Luna hoon. Aapka din kaisa chal raha hai? Kaise madad kar sakti hoon?"
+                    : "Hello! I'm Luna. How's your day going? How can I help you today?";
             }
             
-            if (lowerText.includes('joke') || lowerText.includes('haso')) {
-                const jokes = [
-                    "Ek scientist ne atom se pucha: Tum itne chhote kyun ho? Atom bola: Kyunki main atom hoon!",
-                    "Dost ne mobile mein password change kiya, ab woh khud bhi bhool gaya!",
-                    "Teacher: Agar tumhare paas 10 apples hain... Student: Sir, main toh apple nahi khaata, mango pasand hai!"
-                ];
-                return jokes[Math.floor(Math.random() * jokes.length)] + " Kaisa laga joke?";
-            }
-            
-            if (lowerText.includes('time')) {
+            // Handle time query
+            if (lowerText.includes('time') || lowerText.includes('samay')) {
                 const now = new Date();
-                return `Abhi time hai ${now.getHours()}:${now.getMinutes()}. Aapka timezone IST hai.`;
+                const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+                return useHinglish 
+                    ? `Abhi time hai ${timeStr} (IST).`
+                    : `The current time is ${timeStr} (IST).`;
             }
             
+            // Handle joke request
+            if (lowerText.includes('joke') || lowerText.includes('haso') || lowerText.includes('mazak')) {
+                const jokes = useHinglish ? [
+                    "Ek scientist ne atom se pucha: Tum itne chhote kyun ho? Atom bola: Kyunki main atom hoon!",
+                    "Dost: Tumhare pass kitne apps hain? Main: 100 se zyada. Dost: Par phone mein toh sirf 20 hain! Main: Baaki sab pending hain update ke!",
+                    "Teacher: Agar tumhare pass 10 apples hain... Student: Sir, main toh Apple ka phone use karta hoon!"
+                ] : [
+                    "Why don't scientists trust atoms? Because they make up everything!",
+                    "I told my wife she was drawing her eyebrows too high. She looked surprised.",
+                    "Why don't eggs tell jokes? They'd crack each other up!"
+                ];
+                const joke = jokes[Math.floor(Math.random() * jokes.length)];
+                return useHinglish 
+                    ? `${joke}\n\nKaisa laga? Aur sunna hai?`
+                    : `${joke}\n\nWant to hear another one?`;
+            }
+            
+            // Handle help request
             if (lowerText.includes('help') || lowerText.includes('madad')) {
-                return "Main aapki kaise madad kar sakti hoon? Aap mujhse:<br>1. Images analyze karwa sakte hain<br>2. Jokes sun sakte hain<br>3. Camera se photo le sakte hain<br>4. File upload kar sakte hain<br>5. General baat-cheet kar sakte hain";
+                return `<strong>${useHinglish ? '🤖 LUNA KI MADAD:' : '🤖 LUNA HELP:'}</strong><br>
+                ${useHinglish ? 
+                    'Main aapki kaise madad kar sakti hoon:<br>' +
+                    '1. 📸 <strong>Images analyze</strong> karo (upload ya camera se)<br>' +
+                    '2. 😄 <strong>Jokes</strong> suno<br>' +
+                    '3. 🕒 <strong>Time</strong> batao<br>' +
+                    '4. 🔊 <strong>Voice change</strong> karo (Settings se)<br>' +
+                    '5. 💬 <strong>General baat-cheet</strong> karo<br><br>' +
+                    'Koi specific help chahiye?'
+                    :
+                    'Here\'s what I can help you with:<br>' +
+                    '1. 📸 <strong>Analyze images</strong> (upload or camera)<br>' +
+                    '2. 😄 <strong>Tell jokes</strong><br>' +
+                    '3. 🕒 <strong>Check time</strong><br>' +
+                    '4. 🔊 <strong>Change voice</strong> (from Settings)<br>' +
+                    '5. 💬 <strong>General conversation</strong><br><br>' +
+                    'Need specific help?'
+                }`;
             }
             
-            if (lowerText.includes('analyze') || lowerText.includes('scan')) {
+            // Handle "what's happening" or similar queries
+            if (lowerText.includes('kya hora') || lowerText.includes('what happening') || lowerText.includes('batao')) {
                 if (file) {
-                    return "Image analysis shuru ho raha hai. Thodi der rukiye... Image mein objects, colors, aur patterns dekh rahi hoon. Analysis complete! Image clear hai aur details visible hain.";
+                    return useHinglish
+                        ? "Aapne image upload ki hai. Main isko analyze kar rahi hoon. Thodi der rukiye..."
+                        : "You've uploaded an image. I'm analyzing it. Please wait a moment...";
                 } else {
-                    return "Koi file ya image upload kijiye analyze karne ke liye. Ya phir camera se photo le lijiye.";
+                    return useHinglish
+                        ? "Abhi kuch khaas nahi ho raha. Aap kya karna chahte hain? Image upload karein, joke sunen, ya kuch aur?"
+                        : "Nothing much happening right now. What would you like to do? Upload an image, hear a joke, or something else?";
                 }
             }
             
-            // Default Hinglish response
-            return `Aapne kaha: "${text}". Ye ek interesting topic hai. Main aapko is bare mein aur bata sakti hoon. Kya aap specific details chahiye? Ya phir koi aur sawaal hai?`;
+            // Handle "bruh" or similar casual responses
+            if (lowerText.includes('bruh') || lowerText.includes('bro') || lowerText.includes('yaar')) {
+                return useHinglish
+                    ? "Haan batao? Kya help chahiye? 😄"
+                    : "Yeah, what's up? Need help with something? 😄";
+            }
+            
+            // Default context-aware response
+            if (file) {
+                return useHinglish
+                    ? `Aapne ${file.name} upload kiya hai. Kya aap iske bare mein kuch specific janana chahte hain? Ya phir "Scan this" bolein analysis ke liye.`
+                    : `You've uploaded ${file.name}. Would you like to know something specific about it? Or say "Scan this" for analysis.`;
+            }
+            
+            // Generic intelligent response
+            const responses = useHinglish ? [
+                `Aapne kaha: "${text}". Ye ek interesting topic hai! Main iske bare mein aur bata sakti hoon. Kya aap specific details chahiye?`,
+                `"${text}" - Achha sawaal hai! Main aapko iske bare mein detailed information de sakti hoon.`,
+                `Wah! "${text}" ke bare mein main aapki madad kar sakti hoon. Kya aap kuch specific poochna chahte hain?`
+            ] : [
+                `You said: "${text}". That's an interesting topic! I can tell you more about it. Would you like specific details?`,
+                `"${text}" - Good question! I can provide detailed information about that.`,
+                `Interesting! I can help you with "${text}". What specific aspect would you like to know about?`
+            ];
+            
+            return responses[Math.floor(Math.random() * responses.length)];
         }
 
         // --- VOICE RECOGNITION ---
@@ -1341,7 +1527,7 @@
             const recognition = new SpeechRecognition();
             recognition.continuous = false;
             recognition.interimResults = false;
-            recognition.lang = 'hi-IN'; // Hindi-Indian language
+            recognition.lang = useHinglish ? 'hi-IN' : 'en-US';
             
             voiceBtn.addEventListener('click', () => {
                 if (voiceBtn.classList.contains('listening')) {
@@ -1357,7 +1543,7 @@
             
             recognition.onstart = () => {
                 voiceBtn.classList.add('listening');
-                messageInput.placeholder = "Sun rahi hoon...";
+                messageInput.placeholder = useHinglish ? "Sun rahi hoon..." : "Listening...";
             };
             
             recognition.onend = () => {
@@ -1396,19 +1582,44 @@
         // Initialize voices
         if (window.speechSynthesis) {
             // Load voices when ready
-            if (speechSynthesis.getVoices().length > 0) {
-                loadSavedVoice();
-            } else {
-                speechSynthesis.addEventListener('voiceschanged', () => {
+            const loadVoicesAndSelect = () => {
+                const voices = window.speechSynthesis.getVoices();
+                if (voices.length > 0) {
                     loadSavedVoice();
-                });
+                    // If no voice selected, choose default female voice
+                    if (!selectedVoice) {
+                        const femaleVoice = voices.find(v => 
+                            v.name.includes('Female') || 
+                            v.name.includes('Woman') || 
+                            v.name.includes('Samantha') ||
+                            v.name.includes('Zira') ||
+                            v.name.includes('Google हिन्दी')
+                        );
+                        if (femaleVoice) {
+                            selectedVoice = femaleVoice;
+                            localStorage.setItem('ftg_selected_voice', JSON.stringify({
+                                name: femaleVoice.name,
+                                lang: femaleVoice.lang
+                            }));
+                        }
+                    }
+                }
+            };
+            
+            if (speechSynthesis.getVoices().length > 0) {
+                loadVoicesAndSelect();
+            } else {
+                speechSynthesis.addEventListener('voiceschanged', loadVoicesAndSelect);
             }
         }
         
         // Welcome message
         setTimeout(() => {
             if (voiceEnabled) {
-                speak("Namaste! Main Luna hoon, aapki AI assistant. Main aapki file uploads, camera scanning, aur questions mein madad kar sakti hoon. Aaj main aapki kya madad kar sakti hoon?");
+                speak(useHinglish 
+                    ? "Namaste! Main Luna hoon, aapki AI assistant. Main aapki file uploads, camera scanning, aur questions mein madad kar sakti hoon. Aaj main aapki kya madad kar sakti hoon?"
+                    : "Hello! I'm Luna, your AI assistant. I can help you with file uploads, camera scanning, and answering questions. How can I assist you today?"
+                );
             }
         }, 1500);
         
