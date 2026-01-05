@@ -8,12 +8,13 @@
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;600&display=swap');
 
         :root {
-            --primary: #00f3ff;
-            --secondary: #0066ff;
-            --accent: #ff0055;
-            --bg-dark: #020205;
-            --bg-panel: rgba(2, 2, 5, 0.95);
-            --border: rgba(0, 243, 255, 0.3);
+            --primary: #ff66cc;
+            --secondary: #9933ff;
+            --accent: #ff3366;
+            --bg-dark: #0a0a1a;
+            --bg-panel: rgba(10, 10, 26, 0.95);
+            --border: rgba(255, 102, 204, 0.3);
+            --female-color: #ff66cc;
         }
 
         * { 
@@ -43,8 +44,10 @@
             width: 100%; 
             height: 100%;
             background: 
-                linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+                radial-gradient(circle at 20% 50%, rgba(255, 102, 204, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(153, 51, 255, 0.05) 0%, transparent 50%),
+                linear-gradient(90deg, rgba(255, 102, 204, 0.03) 1px, transparent 1px),
+                linear-gradient(rgba(255, 102, 204, 0.03) 1px, transparent 1px);
             background-size: 40px 40px; 
             pointer-events: none; 
             z-index: -1;
@@ -66,8 +69,8 @@
         .brand {
             font-family: 'Orbitron', sans-serif;
             font-size: 1rem;
-            color: var(--primary);
-            text-shadow: 0 0 10px var(--primary);
+            color: var(--female-color);
+            text-shadow: 0 0 10px var(--female-color);
             letter-spacing: 1px;
             display: flex;
             align-items: center;
@@ -77,7 +80,7 @@
         .owner-badge {
             font-size: 0.65rem;
             padding: 2px 6px;
-            background: rgba(255, 0, 85, 0.2);
+            background: rgba(255, 51, 102, 0.2);
             border: 1px solid var(--accent);
             border-radius: 12px;
             color: #ffaacc;
@@ -87,10 +90,10 @@
         .status-badge {
             font-size: 0.7rem; 
             padding: 3px 6px;
-            border: 1px solid var(--primary); 
-            color: var(--primary);
+            border: 1px solid var(--female-color); 
+            color: var(--female-color);
             border-radius: 4px; 
-            background: rgba(0, 243, 255, 0.1);
+            background: rgba(255, 102, 204, 0.1);
             text-transform: uppercase; 
             font-weight: bold;
             display: flex; 
@@ -101,13 +104,13 @@
         .status-dot {
             width: 6px; 
             height: 6px; 
-            background: var(--primary);
+            background: var(--female-color);
             border-radius: 50%; 
-            box-shadow: 0 0 5px var(--primary);
+            box-shadow: 0 0 5px var(--female-color);
             animation: pulse 2s infinite;
         }
 
-        /* --- AVATAR --- */
+        /* --- AVATAR (Female Style) --- */
         .avatar-container {
             flex-shrink: 0; 
             display: flex; 
@@ -120,13 +123,13 @@
         .avatar-ring {
             width: 90px; 
             height: 90px; 
-            border: 2px solid var(--border);
+            border: 2px solid var(--female-color);
             border-radius: 50%; 
             position: relative;
             display: flex; 
             justify-content: center; 
             align-items: center;
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.15);
+            box-shadow: 0 0 30px rgba(255, 102, 204, 0.3);
             animation: breathe 4s ease-in-out infinite;
         }
 
@@ -142,11 +145,11 @@
         .face-structure {
             width: 65px; 
             height: 65px;
-            background: radial-gradient(circle, rgba(0, 243, 255, 0.2), #000);
+            background: radial-gradient(circle, rgba(255, 102, 204, 0.3), #000);
             border-radius: 40% 40% 50% 50%; 
             position: relative;
-            border: 1px solid var(--primary);
-            box-shadow: inset 0 0 20px rgba(0, 243, 255, 0.3);
+            border: 1px solid var(--female-color);
+            box-shadow: inset 0 0 20px rgba(255, 102, 204, 0.4);
             overflow: hidden;
         }
 
@@ -161,9 +164,9 @@
         .eye {
             width: 14px; 
             height: 4px; 
-            background-color: var(--primary);
-            border-radius: 2px; 
-            box-shadow: 0 0 10px var(--primary);
+            background-color: var(--female-color);
+            border-radius: 50% 50% 0 0; 
+            box-shadow: 0 0 10px var(--female-color);
             animation: blink 4s infinite;
         }
 
@@ -181,7 +184,7 @@
         .bar {
             width: 2px; 
             height: 2px; 
-            background: var(--primary);
+            background: var(--female-color);
             border-radius: 1px; 
             transition: height 0.1s;
         }
@@ -201,7 +204,7 @@
         .msg {
             max-width: 85%; 
             padding: 10px 14px; 
-            border-radius: 12px;
+            border-radius: 15px;
             font-size: 0.9rem; 
             line-height: 1.4; 
             animation: fadeUp 0.3s ease-out;
@@ -211,34 +214,34 @@
         
         .msg.ai {
             align-self: flex-start; 
-            background: rgba(0, 243, 255, 0.1);
-            border: 1px solid var(--border); 
+            background: rgba(255, 102, 204, 0.15);
+            border: 1px solid var(--female-color); 
             border-top-left-radius: 0; 
-            color: #e0e0ff;
+            color: #ffe6f2;
         }
         
         .msg.user {
             align-self: flex-end; 
-            background: rgba(0, 102, 255, 0.2);
-            border: 1px solid rgba(0, 102, 255, 0.5); 
+            background: rgba(153, 51, 255, 0.2);
+            border: 1px solid rgba(153, 51, 255, 0.5); 
             border-top-right-radius: 0;
             color: #fff; 
             text-align: right;
         }
         
         .msg strong { 
-            color: var(--primary); 
+            color: var(--female-color); 
             font-weight: 700; 
         }
         
         .msg em {
             font-style: italic;
-            color: #ffaaff;
+            color: #ffccff;
         }
         
         .msg del {
             text-decoration: line-through;
-            color: #ff8888;
+            color: #ff9999;
         }
         
         .msg pre { 
@@ -254,23 +257,10 @@
         
         .msg code { 
             font-family: 'Courier New', monospace; 
-            color: #00ff88; 
+            color: #ff66ff; 
             background: rgba(0,0,0,0.3);
             padding: 2px 4px;
             border-radius: 3px;
-        }
-
-        /* --- HINGLISH BADGE --- */
-        .hinglish-tag {
-            display: inline-block;
-            background: rgba(255, 215, 0, 0.15);
-            border: 1px solid gold;
-            color: gold;
-            font-size: 0.6rem;
-            padding: 1px 5px;
-            border-radius: 8px;
-            margin-left: 4px;
-            vertical-align: middle;
         }
 
         /* --- INPUT AREA --- */
@@ -284,7 +274,7 @@
 
         .preview-container {
             font-size: 0.75rem; 
-            color: var(--primary);
+            color: var(--female-color);
             margin-bottom: 6px; 
             padding-left: 5px;
             display: flex; 
@@ -312,14 +302,14 @@
         }
         
         .chat-input:focus { 
-            border-color: var(--primary); 
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.15); 
+            border-color: var(--female-color); 
+            box-shadow: 0 0 15px rgba(255, 102, 204, 0.15); 
         }
 
         .btn {
-            background: rgba(0, 243, 255, 0.1); 
-            border: 1px solid var(--primary);
-            color: var(--primary); 
+            background: rgba(255, 102, 204, 0.1); 
+            border: 1px solid var(--female-color);
+            color: var(--female-color); 
             width: 40px; 
             height: 40px; 
             border-radius: 50%;
@@ -335,13 +325,13 @@
         
         .btn:active { 
             transform: scale(0.95); 
-            background: rgba(0, 243, 255, 0.2); 
+            background: rgba(255, 102, 204, 0.2); 
         }
         
         .btn.listening { 
-            background: #ff0055; 
+            background: var(--accent); 
             color: #fff; 
-            border-color: #ff0055; 
+            border-color: var(--accent); 
             animation: pulseRed 1s infinite; 
         }
         
@@ -355,7 +345,7 @@
 
         .typing-indicator { 
             font-size: 0.7rem; 
-            color: var(--primary); 
+            color: var(--female-color); 
             margin-left: 15px; 
             margin-bottom: 3px; 
             opacity: 0; 
@@ -366,7 +356,7 @@
             animation: pulse 1s infinite; 
         }
         
-        #fileInput { 
+        #fileInput, #cameraInput { 
             display: none; 
         }
 
@@ -376,18 +366,18 @@
             gap: 6px;
             padding: 6px 12px;
             overflow-x: auto;
-            border-bottom: 1px solid rgba(0, 243, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 102, 204, 0.1);
             background: rgba(0, 0, 0, 0.3);
             flex-shrink: 0;
         }
         
         .suggestion-chip {
             padding: 5px 10px;
-            background: rgba(0, 243, 255, 0.1);
+            background: rgba(255, 102, 204, 0.1);
             border: 1px solid var(--border);
             border-radius: 15px;
             font-size: 0.75rem;
-            color: var(--primary);
+            color: var(--female-color);
             white-space: nowrap;
             cursor: pointer;
             transition: all 0.2s;
@@ -395,7 +385,7 @@
         }
         
         .suggestion-chip:active { 
-            background: rgba(0, 243, 255, 0.2);
+            background: rgba(255, 102, 204, 0.2);
         }
 
         /* --- IMAGE PREVIEW --- */
@@ -406,6 +396,30 @@
             border: 1px solid var(--border);
             margin-top: 5px;
             display: block;
+        }
+
+        /* --- BUTTON GROUP --- */
+        .button-group {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .file-btn, .camera-btn {
+            flex: 1;
+            padding: 8px 12px;
+            background: rgba(255, 102, 204, 0.1);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--female-color);
+            font-size: 0.8rem;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .file-btn:active, .camera-btn:active {
+            background: rgba(255, 102, 204, 0.2);
         }
 
         /* --- ANIMATIONS --- */
@@ -447,13 +461,13 @@
         
         @keyframes pulseRed { 
             0% { 
-                box-shadow: 0 0 0 0 rgba(255, 0, 85, 0.4); 
+                box-shadow: 0 0 0 0 rgba(255, 51, 102, 0.4); 
             } 
             70% { 
-                box-shadow: 0 0 0 8px rgba(255, 0, 85, 0); 
+                box-shadow: 0 0 0 8px rgba(255, 51, 102, 0); 
             } 
             100% { 
-                box-shadow: 0 0 0 0 rgba(255, 0, 85, 0); 
+                box-shadow: 0 0 0 0 rgba(255, 51, 102, 0); 
             } 
         }
         
@@ -503,7 +517,7 @@
 
     <header>
         <div class="brand">
-            FTGAMERV2 AI <span class="owner-badge">@FTGAMERV2</span>
+            💁 FTGAMERV2 AI <span class="owner-badge">@FTGAMERV2</span>
         </div>
         <div class="status-badge">
             <div class="status-dot"></div> <span id="systemStatus">ONLINE</span>
@@ -526,30 +540,46 @@
 
     <!-- Quick Suggestions -->
     <div class="suggestions">
-        <div class="suggestion-chip" onclick="quickCommand('Hello')">Hello</div>
-        <div class="suggestion-chip" onclick="quickCommand('Time kya hua?')">Time</div>
-        <div class="suggestion-chip" onclick="quickCommand('Help chahiye')">Help</div>
-        <div class="suggestion-chip" onclick="quickCommand('Joke sunao')">Joke</div>
-        <div class="suggestion-chip" onclick="quickCommand('Homework scan karo')">Scan</div>
+        <div class="suggestion-chip" onclick="quickCommand('Hello, how are you?')">Hello</div>
+        <div class="suggestion-chip" onclick="quickCommand('What time is it?')">Time</div>
+        <div class="suggestion-chip" onclick="quickCommand('I need help with something')">Help</div>
+        <div class="suggestion-chip" onclick="quickCommand('Tell me a joke')">Joke</div>
+        <div class="suggestion-chip" onclick="quickCommand('Scan my homework')">Scan</div>
     </div>
 
     <div class="chat-area" id="chatContainer">
         <div class="msg ai">
-            <strong>SYSTEM STATUS:</strong> Online & Fully Operational<br>
-            Welcome to <strong>FTGAMERV2 AI</strong> — where innovation meets intelligence.<br>
-            <em>Note:</em> I respond in <strong>English</strong> only. No Hindi responses.<br>
-            You can upload images for scanning, translation, or analysis.
+            <strong>💁 AI ASSISTANT:</strong> Online & Ready!<br>
+            Hello! I'm <strong>Luna</strong>, your AI assistant. <span style="color:var(--female-color)">(Female Voice)</span><br>
+            I can help you with: <br>
+            • 📸 <strong>Camera scanning</strong> (live camera support)<br>
+            • 📁 <strong>File uploads</strong> (images, PDFs, documents)<br>
+            • 💬 <strong>Chat in English or Hinglish</strong><br>
+            • 🔊 <strong>Voice responses</strong> (complete sentences)<br><br>
+            How can I help you today?
         </div>
     </div>
     
     <div class="typing-indicator" id="typingInd">PROCESSING...</div>
 
     <div class="input-wrapper">
+        <!-- File Upload Buttons -->
+        <div class="button-group">
+            <button class="file-btn" onclick="document.getElementById('fileInput').click()">
+                📁 Upload File
+            </button>
+            <button class="camera-btn" onclick="startCamera()">
+                📸 Live Camera
+            </button>
+        </div>
+        
         <div class="preview-container" id="previewContainer"></div>
+        
         <div class="input-container">
-            <input type="file" id="fileInput" accept="image/*, .txt, .pdf, .jpg, .jpeg, .png" capture="environment">
+            <input type="file" id="fileInput" accept="image/*, .txt, .pdf, .jpg, .jpeg, .png, .doc, .docx">
+            <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none">
             
-            <input type="text" class="chat-input" id="messageInput" placeholder="Type your message..." autocomplete="off">
+            <input type="text" class="chat-input" id="messageInput" placeholder="Type your message or use camera..." autocomplete="off">
             
             <button class="btn" id="voiceBtn" title="Voice Input">
                 <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
@@ -558,6 +588,25 @@
             <button class="btn" id="sendBtn" title="Send">
                 <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
             </button>
+        </div>
+    </div>
+
+    <!-- Camera Modal -->
+    <div id="cameraModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:1000; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+        <div style="width:90%; max-width:500px; background:var(--bg-panel); border-radius:15px; padding:20px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                <h3 style="color:var(--female-color);">📸 Live Camera</h3>
+                <button onclick="closeCamera()" style="background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer;">×</button>
+            </div>
+            <video id="cameraFeed" autoplay playsinline style="width:100%; border-radius:10px; border:2px solid var(--border);"></video>
+            <div style="display:flex; gap:10px; margin-top:15px;">
+                <button onclick="capturePhoto()" style="flex:1; padding:12px; background:var(--accent); color:#fff; border:none; border-radius:10px; cursor:pointer;">
+                    📷 Capture
+                </button>
+                <button onclick="closeCamera()" style="flex:1; padding:12px; background:#666; color:#fff; border:none; border-radius:10px; cursor:pointer;">
+                    Cancel
+                </button>
+            </div>
         </div>
     </div>
 
@@ -571,6 +620,8 @@
         const previewContainer = document.getElementById('previewContainer');
         const typingInd = document.getElementById('typingInd');
         const systemStatus = document.getElementById('systemStatus');
+        const cameraModal = document.getElementById('cameraModal');
+        const cameraFeed = document.getElementById('cameraFeed');
         
         let selectedFile = null;
         let isProcessing = false;
@@ -579,6 +630,57 @@
         let isSpeaking = false;
         let mouthInterval;
         let voiceEnabled = true;
+        let cameraStream = null;
+
+        // --- CAMERA FUNCTIONS ---
+        async function startCamera() {
+            try {
+                cameraStream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: 'environment' },
+                    audio: false 
+                });
+                cameraFeed.srcObject = cameraStream;
+                cameraModal.style.display = 'flex';
+            } catch (err) {
+                addMessage(`<strong>⚠️ CAMERA ERROR:</strong> ${err.message}<br>Please allow camera permissions.`, false);
+            }
+        }
+
+        function capturePhoto() {
+            const canvas = document.createElement('canvas');
+            canvas.width = cameraFeed.videoWidth;
+            canvas.height = cameraFeed.videoHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(cameraFeed, 0, 0);
+            
+            canvas.toBlob(function(blob) {
+                selectedFile = new File([blob], `camera_${Date.now()}.jpg`, { type: 'image/jpeg' });
+                
+                // Show preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewContainer.innerHTML = `
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <img src="${e.target.result}" style="width:30px; height:30px; border-radius:5px; border:1px solid var(--border);">
+                            <span style="font-size:0.7rem">📸 Camera Photo</span>
+                            <span style="cursor:pointer; color:#ff5555; margin-left:5px; font-weight:bold" onclick="clearFile()">✖</span>
+                        </div>
+                    `;
+                };
+                reader.readAsDataURL(blob);
+                
+                closeCamera();
+                addMessage(`<strong>📸 PHOTO CAPTURED:</strong> Ready for analysis!`, false);
+            }, 'image/jpeg', 0.8);
+        }
+
+        function closeCamera() {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+                cameraStream = null;
+            }
+            cameraModal.style.display = 'none';
+        }
 
         // --- QUICK COMMANDS ---
         window.quickCommand = function(command) {
@@ -588,80 +690,65 @@
 
         const commandShortcuts = {
             '/clear': () => {
-                chatContainer.innerHTML = '<div class="msg ai"><strong>SYSTEM:</strong> Chat cleared.</div>';
+                chatContainer.innerHTML = '<div class="msg ai"><strong>💁 LUNA:</strong> Chat cleared!</div>';
                 conversationHistory = [];
             },
             '/help': () => {
-                addMessage(`<strong>AVAILABLE COMMANDS:</strong><br>
+                addMessage(`<strong>💁 LUNA'S COMMANDS:</strong><br>
                 • <code>/clear</code> - Clear chat<br>
                 • <code>/help</code> - Show help<br>
-                • <code>/status</code> - System status<br>
                 • <code>/voice on/off</code> - Toggle voice<br>
                 • <code>/scan</code> - Scan uploaded image<br>
-                • <code>/translate</code> - Translate text<br>`, false);
-            },
-            '/status': () => {
-                addMessage(`<strong>SYSTEM STATUS:</strong><br>
-                • Voice: ${voiceEnabled ? 'ON' : 'OFF'}<br>
-                • Language: English Only<br>
-                • Image Scan: Available<br>
-                • Files: Images, PDF, Text`, false);
+                • <code>/camera</code> - Open camera<br>
+                • <code>/translate</code> - Translate text`, false);
             },
             '/voice': (arg) => {
                 if (arg === 'off') {
                     voiceEnabled = false;
-                    addMessage(`<strong>VOICE:</strong> Disabled`, false);
+                    addMessage(`<strong>💁 LUNA:</strong> Voice disabled`, false);
                 } else {
                     voiceEnabled = true;
-                    addMessage(`<strong>VOICE:</strong> Enabled`, false);
+                    addMessage(`<strong>💁 LUNA:</strong> Voice enabled`, false);
+                    speak("Voice enabled. I'm ready to speak!");
                 }
             },
+            '/camera': () => startCamera(),
             '/scan': () => {
-                if (selectedFile && selectedFile.type.startsWith('image/')) {
-                    addMessage(`<strong>SCANNING:</strong> Analyzing image: ${selectedFile.name}`, false);
+                if (selectedFile) {
+                    addMessage(`<strong>💁 LUNA:</strong> Scanning ${selectedFile.name}...`, false);
                     sendMessage();
                 } else {
-                    addMessage(`<strong>ERROR:</strong> Please upload an image first`, false);
-                }
-            },
-            '/translate': () => {
-                const text = messageInput.value.trim();
-                if (text) {
-                    addMessage(`<strong>TRANSLATING:</strong> "${text.substring(0, 20)}..."`, false);
-                    messageInput.value = `translate to english: ${text}`;
-                    sendMessage();
+                    addMessage(`<strong>💁 LUNA:</strong> Please upload or take a photo first`, false);
                 }
             }
         };
 
-        // --- FILE HANDLING WITH GOOGLE VISION API ---
+        // --- FILE HANDLING ---
         fileInput.addEventListener('change', async (e) => {
             if (e.target.files.length > 0) {
                 selectedFile = e.target.files[0];
                 
-                // Show preview for images
+                // Show preview
                 if (selectedFile.type.startsWith('image/')) {
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         previewContainer.innerHTML = `
                             <div style="display:flex; align-items:center; gap:8px;">
                                 <img src="${e.target.result}" style="width:30px; height:30px; border-radius:5px; border:1px solid var(--border);">
-                                <span style="font-size:0.7rem">${selectedFile.name}</span>
+                                <span style="font-size:0.7rem">📄 ${selectedFile.name}</span>
                                 <span style="cursor:pointer; color:#ff5555; margin-left:5px; font-weight:bold" onclick="clearFile()">✖</span>
                             </div>
                         `;
                     };
                     reader.readAsDataURL(selectedFile);
                     
-                    // Auto-analyze image
-                    setTimeout(() => {
-                        addMessage(`<strong>IMAGE UPLOADED:</strong> ${selectedFile.name}<br>Ask me to scan, translate, or explain this image.`, false);
-                    }, 500);
+                    addMessage(`<strong>💁 LUNA:</strong> File uploaded: ${selectedFile.name}<br>Ask me to scan or analyze it!`, false);
                 } else {
                     previewContainer.innerHTML = `
                         <span style="font-size:0.7rem">📄 ${selectedFile.name}</span>
                         <span style="cursor:pointer; color:#ff5555; margin-left:5px; font-weight:bold" onclick="clearFile()">✖</span>
                     `;
+                    addMessage(`<strong>💁 LUNA:</strong> Document uploaded: ${selectedFile.name}`, false);
                 }
             }
         });
@@ -675,7 +762,7 @@
         // --- UI UTILITIES ---
         function showTyping() {
             typingInd.classList.add('active');
-            systemStatus.innerText = "PROCESSING";
+            systemStatus.innerText = "BUSY";
         }
 
         function hideTyping() {
@@ -683,51 +770,132 @@
             systemStatus.innerText = "ONLINE";
         }
 
-        // --- MARKDOWN PROCESSING FIXED ---
         function processText(text) {
-            // Remove unwanted characters from speech
-            const cleanForSpeech = text.replace(/[-\*_~`#]/g, ' ');
-            
-            // Process markdown for display
+            // Process markdown
             let formatted = text
-                // Code blocks
                 .replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
-                // Inline code
                 .replace(/`([^`]+)`/g, '<code>$1</code>')
-                // Bold with **text** or __text__
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                 .replace(/__(.*?)__/g, '<strong>$1</strong>')
-                // Italic with *text* or _text_
                 .replace(/\*(.*?)\*/g, '<em>$1</em>')
                 .replace(/_(.*?)_/g, '<em>$1</em>')
-                // Strikethrough
                 .replace(/~~(.*?)~~/g, '<del>$1</del>')
-                // Headers
-                .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-                .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-                .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-                // Lists
-                .replace(/^\* (.*$)/gim, '• $1')
-                // Line breaks
                 .replace(/\n/g, '<br>');
                 
-            return {
-                display: formatted,
-                speech: cleanForSpeech
-            };
+            return formatted;
         }
 
         function addMessage(content, isUser) {
-            const processed = processText(content);
             const div = document.createElement('div');
             div.className = `msg ${isUser ? 'user' : 'ai'}`;
-            div.innerHTML = processed.display;
+            div.innerHTML = processText(content);
             chatContainer.appendChild(div);
             
-            // Scroll to bottom
             setTimeout(() => {
                 chatContainer.scrollTop = chatContainer.scrollHeight;
             }, 10);
+        }
+
+        // --- VOICE SYSTEM FIXED (FEMALE VOICE, NO CUTTING) ---
+        function speak(text) {
+            if (!window.speechSynthesis || !voiceEnabled || !text || text.trim().length < 3) return;
+            
+            // Cancel any ongoing speech
+            window.speechSynthesis.cancel();
+            animateMouth(false);
+            
+            // Split into sentences for better flow
+            const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+            
+            // Clear queue and speak each sentence with delay
+            speechQueue = [];
+            isSpeaking = false;
+            
+            sentences.forEach((sentence, index) => {
+                const trimmed = sentence.trim();
+                if (trimmed.length > 2) {
+                    // Add delay between sentences
+                    speechQueue.push({ text: trimmed, delay: index * 800 });
+                }
+            });
+            
+            processSpeechQueue();
+        }
+
+        function processSpeechQueue() {
+            if (speechQueue.length === 0) {
+                isSpeaking = false;
+                animateMouth(false);
+                return;
+            }
+            
+            isSpeaking = true;
+            const item = speechQueue.shift();
+            
+            setTimeout(() => {
+                const utterance = new SpeechSynthesisUtterance(item.text.substring(0, 300));
+                
+                // FEMALE VOICE SETTINGS
+                const voices = window.speechSynthesis.getVoices();
+                
+                // Prefer female voices (Indian or US)
+                const femaleVoices = voices.filter(v => 
+                    v.name.includes('Female') || 
+                    v.name.includes('Woman') || 
+                    v.name.includes('Samantha') ||
+                    v.name.includes('Google UK English Female') ||
+                    v.name.includes('Microsoft Zira Desktop') ||
+                    (v.lang.includes('IN') && v.name.toLowerCase().includes('female'))
+                );
+                
+                // Fallback to any female-sounding voice
+                if (femaleVoices.length > 0) {
+                    utterance.voice = femaleVoices[0];
+                } else {
+                    // Try to find any non-male voice
+                    const nonMale = voices.filter(v => 
+                        !v.name.includes('Male') && 
+                        !v.name.includes('Man') && 
+                        !v.name.includes('David')
+                    );
+                    if (nonMale.length > 0) utterance.voice = nonMale[0];
+                }
+                
+                // Natural female voice settings
+                utterance.rate = 0.95;
+                utterance.pitch = 1.2; // Higher pitch for female voice
+                utterance.volume = 1.0;
+                utterance.lang = 'en-IN';
+                
+                utterance.onstart = () => animateMouth(true);
+                utterance.onend = () => {
+                    setTimeout(() => processSpeechQueue(), 300);
+                };
+                utterance.onerror = () => {
+                    setTimeout(() => processSpeechQueue(), 300);
+                };
+                
+                window.speechSynthesis.speak(utterance);
+            }, item.delay);
+        }
+
+        // --- MOUTH ANIMATION ---
+        function animateMouth(active) {
+            const bars = document.querySelectorAll('.bar');
+            
+            if (active) {
+                if (!mouthInterval) {
+                    mouthInterval = setInterval(() => {
+                        bars.forEach(b => {
+                            b.style.height = Math.random() * 8 + 2 + 'px';
+                        });
+                    }, 100);
+                }
+            } else {
+                clearInterval(mouthInterval);
+                mouthInterval = null;
+                bars.forEach(b => b.style.height = '2px');
+            }
         }
 
         // --- NETWORK COMMUNICATION ---
@@ -752,65 +920,87 @@
             
             isProcessing = true;
             
-            // Stop any ongoing speech
+            // Stop speech
             if (window.speechSynthesis) {
                 window.speechSynthesis.cancel();
                 animateMouth(false);
             }
             
             // Display user message
-            if (text) {
-                addMessage(text, true);
-            }
-            
+            if (text) addMessage(text, true);
             if (selectedFile) {
                 addMessage(`📎 [File: ${selectedFile.name}]`, true);
             }
             
-            // Prepare form data
+            // Prepare form data with camera/image context
             const formData = new FormData();
             if (text) formData.append('text', text);
-            if (selectedFile) formData.append('file', selectedFile);
+            if (selectedFile) {
+                formData.append('file', selectedFile);
+                formData.append('file_type', selectedFile.type);
+            }
             
-            // Add language preference - ENGLISH ONLY
+            // Add context for better responses
+            formData.append('assistant_name', 'Luna');
+            formData.append('assistant_gender', 'female');
             formData.append('language', 'english');
-            formData.append('response_mode', 'text_only');
+            formData.append('user_context', 'User may upload homework, documents, or images for analysis');
             
-            // Clear inputs
+            // Clear input
             messageInput.value = '';
             
             showTyping();
             
             try {
-                // Use enhanced API endpoint with image support
+                // Try enhanced endpoint first
                 const res = await fetch('https://bj-tricks-ai.vercel.app/chat-enhanced', {
                     method: 'POST',
                     body: formData
                 });
                 
+                let data;
                 if (!res.ok) {
                     // Fallback to original endpoint
                     const fallbackRes = await fetch('https://bj-tricks-ai.vercel.app/chat', {
                         method: 'POST',
                         body: formData
                     });
-                    
-                    const data = await fallbackRes.json();
-                    handleResponse(data);
+                    data = await fallbackRes.json();
                 } else {
-                    const data = await res.json();
-                    handleResponse(data);
+                    data = await res.json();
+                }
+                
+                hideTyping();
+                
+                let responseText = data.result || data.error || "I didn't understand that. Can you rephrase?";
+                
+                // Make sure response is complete (add if cut off)
+                if (responseText.length < 50 && !responseText.endsWith('.') && !responseText.endsWith('?') && !responseText.endsWith('!')) {
+                    responseText += ". Is there anything else I can help you with?";
+                }
+                
+                // Add female perspective
+                responseText = responseText.replace(/I am/g, "I'm")
+                                          .replace(/I can/g, "I can")
+                                          .replace(/kar sakta/g, "kar sakti")
+                                          .replace(/hoon/g, "hoon");
+                
+                // Display response
+                addMessage(responseText, false);
+                
+                // Speak response
+                if (voiceEnabled) {
+                    setTimeout(() => speak(responseText), 500);
                 }
                 
             } catch (err) {
                 hideTyping();
                 console.error("Error:", err);
                 
-                // Offline response
                 const responses = [
-                    "I'm having trouble connecting. Please check your internet.",
-                    "Network error. Try again in a moment.",
-                    "Can't reach server right now."
+                    "I'm having connection issues. Let me try again.",
+                    "Network problem. Please check your internet.",
+                    "Temporarily unavailable. Try in a moment."
                 ];
                 const response = responses[Math.floor(Math.random() * responses.length)];
                 
@@ -818,91 +1008,6 @@
                 if (voiceEnabled) speak(response);
             } finally {
                 isProcessing = false;
-            }
-            
-            function handleResponse(data) {
-                hideTyping();
-                
-                let responseText = data.result || data.error || "I didn't get that. Can you repeat?";
-                
-                // Force English response - remove any Hindi
-                responseText = responseText.replace(/[\u0900-\u097F]/g, '');
-                
-                // Clean up response
-                responseText = responseText
-                    .replace(/-\s*-/g, ' ')  // Remove dashes
-                    .replace(/\.\.\./g, '. ') // Remove ellipsis
-                    .trim();
-                
-                // Display response
-                addMessage(responseText, false);
-                
-                // Speak response if voice is enabled
-                if (voiceEnabled) {
-                    const processed = processText(responseText);
-                    speak(processed.speech);
-                }
-            }
-        }
-
-        // --- VOICE SYSTEM FIXED ---
-        function speak(text) {
-            if (!window.speechSynthesis || !text || text.trim().length < 3) return;
-            
-            window.speechSynthesis.cancel();
-            
-            const utterance = new SpeechSynthesisUtterance(text.substring(0, 250));
-            
-            // Set to Indian English voice (not British)
-            const voices = window.speechSynthesis.getVoices();
-            
-            // Prefer Indian English voices
-            const indianVoices = voices.filter(v => 
-                v.lang.includes('IN') || 
-                v.name.includes('India') || 
-                v.name.includes('Ravi') || 
-                v.name.includes('Neeru')
-            );
-            
-            // Fallback to US English
-            const usVoices = voices.filter(v => v.lang.includes('US'));
-            
-            if (indianVoices.length > 0) {
-                utterance.voice = indianVoices[0];
-                utterance.lang = 'en-IN';
-            } else if (usVoices.length > 0) {
-                utterance.voice = usVoices[0];
-                utterance.lang = 'en-US';
-            }
-            
-            // Natural settings for Indian accent
-            utterance.rate = 0.95;
-            utterance.pitch = 1.0;
-            utterance.volume = 1.0;
-            
-            utterance.onstart = () => animateMouth(true);
-            utterance.onend = () => animateMouth(false);
-            utterance.onerror = () => animateMouth(false);
-            
-            window.speechSynthesis.speak(utterance);
-        }
-
-        // --- MOUTH ANIMATION ---
-        function animateMouth(active) {
-            const bars = document.querySelectorAll('.bar');
-            
-            if (active) {
-                if (!mouthInterval) {
-                    mouthInterval = setInterval(() => {
-                        bars.forEach(b => {
-                            b.style.height = Math.random() * 8 + 2 + 'px';
-                        });
-                    }, 100);
-                }
-            } else {
-                clearInterval(mouthInterval);
-                mouthInterval = null;
-                bars.forEach(b => b.style.height = '2px');
             }
         }
 
@@ -913,7 +1018,7 @@
             const recognition = new SpeechRecognition();
             recognition.continuous = false;
             recognition.interimResults = false;
-            recognition.lang = 'en-US'; // English only
+            recognition.lang = 'en-US';
             
             voiceBtn.addEventListener('click', () => {
                 if (voiceBtn.classList.contains('listening')) {
@@ -934,7 +1039,7 @@
             
             recognition.onend = () => {
                 voiceBtn.classList.remove('listening');
-                messageInput.placeholder = "Type your message...";
+                messageInput.placeholder = "Type your message or use camera...";
             };
             
             recognition.onresult = (event) => {
@@ -972,12 +1077,12 @@
             };
         }
         
-        // Welcome message
+        // Welcome message with female voice
         setTimeout(() => {
             if (voiceEnabled) {
-                speak("Welcome to FTGAMERV2 AI. I speak English only. How can I help you today?");
+                speak("Hello! I'm Luna, your AI assistant. I'm here to help you with camera scanning, file uploads, and answering questions. How can I assist you today?");
             }
-        }, 1000);
+        }, 1500);
         
     </script>
 </body>
