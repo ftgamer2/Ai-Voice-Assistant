@@ -72,29 +72,6 @@
             letter-spacing: 1px;
         }
 
-        .lang-selector {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-right: 10px;
-        }
-
-        .lang-btn {
-            padding: 4px 8px;
-            background: rgba(0, 243, 255, 0.1);
-            border: 1px solid var(--border);
-            color: var(--primary);
-            border-radius: 4px;
-            font-size: 0.7rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .lang-btn.active {
-            background: var(--primary);
-            color: var(--bg-dark);
-        }
-
         .status-badge {
             font-size: 0.75rem; 
             padding: 4px 8px;
@@ -328,7 +305,7 @@
 
         .input-container {
             display: flex; 
-            gap: 10px; 
+            gap: 8px; 
             align-items: center;
             width: 100%;
         }
@@ -404,6 +381,32 @@
         
         #fileInput { 
             display: none; 
+        }
+
+        /* --- SPEECH CONTROL --- */
+        .speech-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .speech-btn {
+            background: rgba(0, 102, 255, 0.2);
+            border: 1px solid rgba(0, 102, 255, 0.5);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .speech-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
         }
 
         /* --- ANIMATIONS --- */
@@ -501,26 +504,17 @@
                 font-size: 1rem; 
             }
             
-            .lang-selector {
-                gap: 4px;
-            }
-            
-            .lang-btn {
-                padding: 3px 6px;
-                font-size: 0.65rem;
-            }
-            
             .status-badge {
                 font-size: 0.7rem;
                 min-width: 70px;
             }
-        }
-
-        @media (max-width: 360px) {
+            
             .input-container {
                 gap: 6px;
             }
-            
+        }
+
+        @media (max-width: 360px) {
             .btn {
                 width: 44px;
                 height: 44px;
@@ -528,6 +522,16 @@
             
             .chat-input {
                 padding: 10px 12px;
+                font-size: 0.9rem;
+            }
+            
+            .speech-controls {
+                gap: 6px;
+            }
+            
+            .speech-btn {
+                font-size: 0.65rem;
+                padding: 4px 8px;
             }
         }
     </style>
@@ -537,15 +541,9 @@
 
     <header>
         <div class="brand">FTGAMER2 AI</div>
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <div class="lang-selector">
-                <button class="lang-btn active" data-lang="hi-IN">हिंदी</button>
-                <button class="lang-btn" data-lang="en-US">English</button>
-            </div>
-            <div class="status-badge">
-                <div class="status-dot"></div>
-                <span id="systemStatus">ऑनलाइन</span>
-            </div>
+        <div class="status-badge">
+            <div class="status-dot"></div>
+            <span id="systemStatus">ONLINE</span>
         </div>
     </header>
 
@@ -569,26 +567,28 @@
 
     <div class="chat-area" id="chatContainer">
         <div class="msg ai">
-            <strong>सिस्टम स्थिति:</strong> ऑनलाइन और पूरी तरह से कार्यशील<br>
-            <strong>FTGAMER2 AI</strong> में आपका स्वागत है — जहां नवाचार बुद्धिमत्ता से मिलता है<br>
-            आधुनिक डिजिटल दुनिया के लिए बनाए गए AI-संचालित समाधानों की शक्ति का अनुभव करें
+            <strong>SYSTEM STATUS:</strong> Online & Fully Operational.<br>
+            Welcome to <strong>FTGAMER2 AI</strong> — where innovation meets intelligence.<br>
+            Main hoon aapka personal AI assistant. Aap mujhse kuch bhi puch sakte ho!<br>
+            <em>Example: "hello kese ho, aaj me aap ki madad kese karu"</em>
         </div>
     </div>
     
-    <div class="typing-indicator" id="typingInd">डेटा संसाधित हो रहा है...</div>
+    <div class="typing-indicator" id="typingInd">PROCESSING...</div>
 
     <div class="input-wrapper">
         <div class="preview-container" id="previewContainer"></div>
+        
         <div class="input-container">
             <input type="file" id="fileInput" accept=".txt,.pdf,.jpg,.png,.mp3,.wav">
             
             <input type="text" class="chat-input" id="messageInput" 
-                   placeholder="कमांड लिखें या बोलें..." 
+                   placeholder="Type command... (Hinglish me bhi likh sakte ho)" 
                    autocomplete="off" 
                    autocapitalize="off" 
                    spellcheck="false">
             
-            <button class="btn" id="voiceBtn" title="बोलें" aria-label="Voice input">
+            <button class="btn" id="voiceBtn" title="Voice Input" aria-label="Voice input">
                 <svg viewBox="0 0 24 24">
                     <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
                     <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
@@ -597,11 +597,32 @@
                 </svg>
             </button>
             
-            <button class="btn" id="sendBtn" title="भेजें" aria-label="Send message">
+            <button class="btn" id="sendBtn" title="Send" aria-label="Send message">
                 <svg viewBox="0 0 24 24">
                     <line x1="22" y1="2" x2="11" y2="13"></line>
                     <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
                 </svg>
+            </button>
+        </div>
+        
+        <div class="speech-controls" id="speechControls">
+            <button class="speech-btn" id="speakBtn" title="Speak">
+                <svg width="12" height="12" viewBox="0 0 24 24">
+                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                </svg>
+                Speak
+            </button>
+            <button class="speech-btn" id="stopSpeakBtn" title="Stop Speaking">
+                <svg width="12" height="12" viewBox="0 0 24 24">
+                    <path d="M6 6h12v12H6z"/>
+                </svg>
+                Stop
+            </button>
+            <button class="speech-btn" id="pauseSpeakBtn" title="Pause/Resume">
+                <svg width="12" height="12" viewBox="0 0 24 24">
+                    <path d="M6 4h4v16H6zm8 0h4v16h-4z"/>
+                </svg>
+                Pause
             </button>
         </div>
     </div>
@@ -616,46 +637,57 @@
         const previewContainer = document.getElementById('previewContainer');
         const typingInd = document.getElementById('typingInd');
         const systemStatus = document.getElementById('systemStatus');
-        const langButtons = document.querySelectorAll('.lang-btn');
+        const speakBtn = document.getElementById('speakBtn');
+        const stopSpeakBtn = document.getElementById('stopSpeakBtn');
+        const pauseSpeakBtn = document.getElementById('pauseSpeakBtn');
         
         let selectedFile = null;
         let isSpeaking = false;
-        let currentLang = 'hi-IN'; // Default to Hindi
-        let recognition = null;
+        let speechQueue = [];
+        let currentUtterance = null;
+        let speechPaused = false;
 
-        // --- LANGUAGE SETTINGS ---
-        function setLanguage(lang) {
-            currentLang = lang;
-            
-            // Update UI text based on language
-            if (lang === 'hi-IN') {
-                systemStatus.innerText = "ऑनलाइन";
-                messageInput.placeholder = "कमांड लिखें या बोलें...";
-                typingInd.innerText = "डेटा संसाधित हो रहा है...";
-            } else {
-                systemStatus.innerText = "ONLINE";
-                messageInput.placeholder = "Type or speak command...";
-                typingInd.innerText = "PROCESSING DATA...";
-            }
-            
-            // Update active button state
-            langButtons.forEach(btn => {
-                if (btn.dataset.lang === lang) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-            
-            // Reinitialize speech recognition with new language
-            initializeSpeechRecognition();
-        }
-
-        langButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                setLanguage(btn.dataset.lang);
-            });
-        });
+        // --- HINGLISH SPEECH FIX ---
+        // Map common Hindi words to better pronunciations
+        const hinglishPronunciationMap = {
+            'kese': 'kaise',
+            'ho': 'ho',
+            'app': 'aap',
+            'aap': 'aap',
+            'ki': 'ki',
+            'madad': 'maddaad',
+            'karu': 'karoon',
+            'hain': 'hain',
+            'hai': 'hai',
+            'mein': 'main',
+            'main': 'main',
+            'tum': 'tum',
+            'tu': 'too',
+            'ka': 'ka',
+            'ke': 'ke',
+            'ko': 'ko',
+            'se': 'se',
+            'par': 'par',
+            'ye': 'ye',
+            'wo': 'wo',
+            'us': 'us',
+            'is': 'is',
+            'na': 'na',
+            'ji': 'ji',
+            'nahi': 'nahin',
+            'haan': 'haan',
+            'achha': 'achchha',
+            'thik': 'theek',
+            'bhai': 'bhaai',
+            'dost': 'dost',
+            'yaar': 'yaar',
+            'kya': 'kya',
+            'kyun': 'kyoon',
+            'kahan': 'kahaan',
+            'kaun': 'kaun',
+            'kab': 'kab',
+            'kitna': 'kitna'
+        };
 
         // --- FILE HANDLING ---
         fileInput.addEventListener('change', (e) => {
@@ -730,13 +762,13 @@
         // --- UI UTILS ---
         function showTyping() {
             typingInd.classList.add('active');
-            systemStatus.innerText = currentLang === 'hi-IN' ? "व्यस्त" : "BUSY";
+            systemStatus.innerText = "BUSY";
             systemStatus.style.color = "#00f3ff";
         }
 
         function hideTyping() {
             typingInd.classList.remove('active');
-            systemStatus.innerText = currentLang === 'hi-IN' ? "ऑनलाइन" : "ONLINE";
+            systemStatus.innerText = "ONLINE";
             systemStatus.style.color = "#fff";
         }
 
@@ -755,16 +787,188 @@
             }, 50);
         }
 
+        // --- IMPROVED HINGLISH SPEECH (No cutting) ---
+        function improveHinglishPronunciation(text) {
+            let words = text.split(' ');
+            return words.map(word => {
+                let lowerWord = word.toLowerCase();
+                if (hinglishPronunciationMap[lowerWord]) {
+                    // Keep original case pattern if possible
+                    if (word === word.toUpperCase()) {
+                        return hinglishPronunciationMap[lowerWord].toUpperCase();
+                    } else if (word[0] === word[0].toUpperCase()) {
+                        let corrected = hinglishPronunciationMap[lowerWord];
+                        return corrected.charAt(0).toUpperCase() + corrected.slice(1);
+                    }
+                    return hinglishPronunciationMap[lowerWord];
+                }
+                return word;
+            }).join(' ');
+        }
+
+        // Split text into manageable chunks for speech
+        function splitTextForSpeech(text, maxLength = 200) {
+            const chunks = [];
+            let currentChunk = '';
+            const sentences = text.split(/(?<=[.!?])\s+/);
+            
+            for (let sentence of sentences) {
+                if (currentChunk.length + sentence.length > maxLength) {
+                    if (currentChunk.trim()) {
+                        chunks.push(currentChunk.trim());
+                    }
+                    currentChunk = sentence;
+                } else {
+                    currentChunk += (currentChunk ? ' ' : '') + sentence;
+                }
+            }
+            
+            if (currentChunk.trim()) {
+                chunks.push(currentChunk.trim());
+            }
+            
+            return chunks;
+        }
+
+        // --- FIXED SPEECH FUNCTION (No cutting) ---
+        function speak(text) {
+            if (!window.speechSynthesis) {
+                console.log("Speech synthesis not supported");
+                return;
+            }
+            
+            // Stop any ongoing speech
+            stopSpeaking();
+            
+            // Improve Hinglish pronunciation
+            let improvedText = improveHinglishPronunciation(text);
+            
+            // Split text into chunks
+            const chunks = splitTextForSpeech(improvedText);
+            
+            // Clear previous queue
+            speechQueue = [...chunks];
+            
+            // Start speaking
+            speakNextChunk();
+            
+            // Update UI
+            animateMouth(true);
+            speakBtn.classList.add('active');
+            systemStatus.innerText = "SPEAKING";
+            systemStatus.style.color = "#ffaa00";
+        }
+
+        function speakNextChunk() {
+            if (speechQueue.length === 0 || speechPaused) {
+                // Speech finished
+                animateMouth(false);
+                speakBtn.classList.remove('active');
+                systemStatus.innerText = "ONLINE";
+                systemStatus.style.color = "#fff";
+                return;
+            }
+            
+            const chunk = speechQueue.shift();
+            currentUtterance = new SpeechSynthesisUtterance(chunk);
+            
+            // Set voice properties for Hinglish
+            currentUtterance.lang = 'en-IN'; // Indian English for Hinglish
+            currentUtterance.rate = 0.85;
+            currentUtterance.pitch = 1.0;
+            currentUtterance.volume = 1;
+            
+            // Try to get an Indian English voice
+            const voices = speechSynthesis.getVoices();
+            const indianVoice = voices.find(v => 
+                v.lang === 'en-IN' || 
+                v.name.includes('India') || 
+                v.name.includes('Hindi')
+            );
+            
+            if (indianVoice) {
+                currentUtterance.voice = indianVoice;
+            }
+            
+            currentUtterance.onend = () => {
+                // Add small pause between chunks
+                setTimeout(() => {
+                    speakNextChunk();
+                }, 300);
+            };
+            
+            currentUtterance.onerror = (event) => {
+                console.log("Speech error:", event.error);
+                // Continue with next chunk even if error
+                setTimeout(() => {
+                    speakNextChunk();
+                }, 300);
+            };
+            
+            window.speechSynthesis.speak(currentUtterance);
+        }
+
+        function stopSpeaking() {
+            if (window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+            }
+            speechQueue = [];
+            currentUtterance = null;
+            speechPaused = false;
+            animateMouth(false);
+            speakBtn.classList.remove('active');
+            pauseSpeakBtn.classList.remove('active');
+            systemStatus.innerText = "ONLINE";
+            systemStatus.style.color = "#fff";
+        }
+
+        function pauseResumeSpeaking() {
+            if (!window.speechSynthesis.speaking && speechQueue.length === 0) {
+                return;
+            }
+            
+            if (speechPaused) {
+                // Resume
+                speechPaused = false;
+                window.speechSynthesis.resume();
+                pauseSpeakBtn.textContent = "Pause";
+                pauseSpeakBtn.classList.remove('active');
+                animateMouth(true);
+            } else {
+                // Pause
+                speechPaused = true;
+                window.speechSynthesis.pause();
+                pauseSpeakBtn.textContent = "Resume";
+                pauseSpeakBtn.classList.add('active');
+                animateMouth(false);
+            }
+        }
+
+        // --- MOUTH ANIMATION ---
+        let mouthInterval;
+        
+        function animateMouth(active) {
+            const bars = document.querySelectorAll('.bar');
+            if (active) {
+                if (!mouthInterval) {
+                    mouthInterval = setInterval(() => {
+                        bars.forEach(b => b.style.height = Math.random() * 20 + 3 + 'px');
+                    }, 100);
+                }
+            } else {
+                clearInterval(mouthInterval);
+                mouthInterval = null;
+                bars.forEach(b => b.style.height = '3px');
+            }
+        }
+
         // --- NETWORK ---
         async function sendMessage() {
             const text = messageInput.value.trim();
             if (!text && !selectedFile) return;
 
             // Stop any ongoing speech
-            if (window.speechSynthesis) {
-                window.speechSynthesis.cancel();
-                animateMouth(false);
-            }
+            stopSpeaking();
 
             let userDisplay = processText(text);
             if (selectedFile) {
@@ -774,7 +978,6 @@
 
             const formData = new FormData();
             formData.append('text', text);
-            formData.append('lang', currentLang);
             if (selectedFile) formData.append('file', selectedFile);
 
             // Cleanup Inputs
@@ -794,111 +997,38 @@
                 const data = await res.json();
                 hideTyping();
                 
-                let responseText = data.result || data.error || 
-                    (currentLang === 'hi-IN' ? "कोई डेटा प्राप्त नहीं हुआ" : "No data received");
+                let responseText = data.result || data.error || "No data received";
                 
-                // SPEAK response
-                const speakableText = responseText
-                    .replace(/[*`#\[\]]/g, '')
-                    .replace(/<[^>]*>/g, '')
-                    .split("```")[0]
-                    .substring(0, 300);
-                speak(speakableText);
-
-                // DISPLAY formatted response
+                // Display response
                 addMessage(processText(responseText), false);
+                
+                // Auto-speak response (optional - can be triggered manually)
+                // speak(responseText);
 
             } catch (err) {
                 hideTyping();
-                const errorMsg = currentLang === 'hi-IN' 
-                    ? '<span style="color:#ff5555">नेटवर्क त्रुटि। इंटरनेट कनेक्शन जांचें</span>'
-                    : '<span style="color:#ff5555">Network Error. Check internet connection.</span>';
-                addMessage(errorMsg, false);
-                speak(currentLang === 'hi-IN' 
-                    ? "मैं अभी सर्वर से कनेक्ट नहीं कर पा रहा हूं सर"
-                    : "I cannot connect to the server right now sir.");
+                addMessage('<span style="color:#ff5555">Network Error. Check internet connection.</span>', false);
+                speak("I cannot connect to the server right now sir.");
             }
         }
 
-        // --- HINDI VOICE & ANIMATION ---
-        let mouthInterval;
-        
-        function animateMouth(active) {
-            const bars = document.querySelectorAll('.bar');
-            if (active) {
-                if (!mouthInterval) {
-                    mouthInterval = setInterval(() => {
-                        bars.forEach(b => b.style.height = Math.random() * 20 + 3 + 'px');
-                    }, 100);
-                }
-            } else {
-                clearInterval(mouthInterval);
-                mouthInterval = null;
-                bars.forEach(b => b.style.height = '3px');
-            }
-        }
-
-        function speak(text) {
-            if (!window.speechSynthesis) return;
-            
-            window.speechSynthesis.cancel();
-            
-            const utterance = new SpeechSynthesisUtterance(text.substring(0, 500));
-            utterance.lang = currentLang;
-            utterance.rate = 0.9;
-            utterance.pitch = 1.0;
-            utterance.volume = 1;
-            
-            // Try to find Hindi voice first, then fallback to English
-            const voices = window.speechSynthesis.getVoices();
-            let voice = voices.find(v => v.lang === currentLang) || 
-                       voices.find(v => v.lang.startsWith(currentLang.split('-')[0])) ||
-                       voices.find(v => v.lang.includes('en')) || 
-                       voices[0];
-            
-            if (voice) utterance.voice = voice;
-
-            utterance.onstart = () => {
-                animateMouth(true);
-                voiceBtn.classList.add('listening');
-                systemStatus.innerText = currentLang === 'hi-IN' ? "बोल रहा" : "SPEAKING";
-                systemStatus.style.color = "#ffaa00";
-            };
-            
-            utterance.onend = () => {
-                animateMouth(false);
-                voiceBtn.classList.remove('listening');
-                systemStatus.innerText = currentLang === 'hi-IN' ? "ऑनलाइन" : "ONLINE";
-                systemStatus.style.color = "#fff";
-            };
-            
-            utterance.onerror = () => {
-                animateMouth(false);
-                voiceBtn.classList.remove('listening');
-            };
-
-            window.speechSynthesis.speak(utterance);
-        }
-
-        // --- SPEECH RECOGNITION INITIALIZATION ---
+        // --- SPEECH RECOGNITION (Hinglish compatible) ---
         function initializeSpeechRecognition() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             
             if (!SpeechRecognition) {
                 voiceBtn.style.display = 'none';
                 addMessage(
-                    currentLang === 'hi-IN' 
-                    ? "<strong>सिस्टम नोट:</strong> इस ब्राउज़र में वॉइस इनपुट समर्थित नहीं है"
-                    : "<strong>System Note:</strong> Voice input not supported in this browser",
+                    "<strong>System Note:</strong> Voice input not supported in this browser",
                     false
                 );
                 return;
             }
 
-            recognition = new SpeechRecognition();
+            const recognition = new SpeechRecognition();
             recognition.continuous = false;
             recognition.interimResults = false;
-            recognition.lang = currentLang;
+            recognition.lang = 'en-IN'; // Indian English for Hinglish
 
             voiceBtn.addEventListener('click', () => {
                 if (voiceBtn.classList.contains('listening')) {
@@ -916,16 +1046,16 @@
 
             recognition.onstart = () => {
                 voiceBtn.classList.add('listening');
-                messageInput.placeholder = currentLang === 'hi-IN' ? "सुन रहा हूं..." : "Listening...";
-                systemStatus.innerText = currentLang === 'hi-IN' ? "सुन रहा" : "LISTENING";
+                messageInput.placeholder = "Listening...";
+                systemStatus.innerText = "LISTENING";
                 systemStatus.style.color = "#ff0055";
             };
 
             recognition.onend = () => {
                 voiceBtn.classList.remove('listening');
-                messageInput.placeholder = currentLang === 'hi-IN' ? "कमांड लिखें या बोलें..." : "Type or speak command...";
+                messageInput.placeholder = "Type command... (Hinglish me bhi likh sakte ho)";
                 if (!typingInd.classList.contains('active')) {
-                    systemStatus.innerText = currentLang === 'hi-IN' ? "ऑनलाइन" : "ONLINE";
+                    systemStatus.innerText = "ONLINE";
                     systemStatus.style.color = "#fff";
                 }
             };
@@ -933,16 +1063,17 @@
             recognition.onresult = (event) => {
                 const transcript = event.results[0][0].transcript;
                 messageInput.value = transcript;
-                setTimeout(sendMessage, 500);
+                // Auto-send after voice input
+                setTimeout(sendMessage, 800);
             };
 
             recognition.onerror = (event) => {
                 console.error("Speech recognition error:", event.error);
                 voiceBtn.classList.remove('listening');
-                messageInput.placeholder = currentLang === 'hi-IN' 
-                    ? "माइक त्रुटि (अनुमतियां जांचें)"
-                    : "Mic Error (Check Permissions)";
+                messageInput.placeholder = "Mic Error (Check Permissions)";
             };
+            
+            return recognition;
         }
 
         // --- EVENT HANDLERS ---
@@ -955,6 +1086,20 @@
             }
         });
 
+        // Speech control buttons
+        speakBtn.addEventListener('click', () => {
+            const lastAIMessage = document.querySelector('.msg.ai:last-child');
+            if (lastAIMessage) {
+                const text = lastAIMessage.textContent || lastAIMessage.innerText;
+                if (text && text.length > 10) { // Don't speak very short messages
+                    speak(text);
+                }
+            }
+        });
+
+        stopSpeakBtn.addEventListener('click', stopSpeaking);
+        pauseSpeakBtn.addEventListener('click', pauseResumeSpeaking);
+
         // Initialize on load
         window.addEventListener('DOMContentLoaded', () => {
             // Initialize speech recognition
@@ -962,15 +1107,26 @@
             
             // Load voices for speech synthesis
             if (window.speechSynthesis) {
-                window.speechSynthesis.onvoiceschanged = () => {
-                    // Voices loaded
-                };
+                // Force voices to load
+                let voices = speechSynthesis.getVoices();
+                if (voices.length === 0) {
+                    speechSynthesis.onvoiceschanged = () => {
+                        voices = speechSynthesis.getVoices();
+                    };
+                }
             }
             
             // Focus input on tap outside
             document.addEventListener('click', (e) => {
                 if (!e.target.closest('.input-container') && !e.target.closest('.chat-area')) {
                     messageInput.focus();
+                }
+            });
+            
+            // Handle page visibility changes
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    stopSpeaking();
                 }
             });
         });
