@@ -8,13 +8,14 @@
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;600&display=swap');
 
         :root {
-            --primary: #ff66cc;
-            --secondary: #9933ff;
-            --accent: #ff3366;
+            --primary: #00b0ff;
+            --secondary: #0066ff;
+            --accent: #0088ff;
             --bg-dark: #0a0a1a;
             --bg-panel: rgba(10, 10, 26, 0.95);
-            --border: rgba(255, 102, 204, 0.3);
-            --female-color: #ff66cc;
+            --border: rgba(0, 176, 255, 0.3);
+            --ai-color: #00b0ff;
+            --user-color: #0066ff;
         }
 
         * { 
@@ -44,10 +45,10 @@
             width: 100%; 
             height: 100%;
             background: 
-                radial-gradient(circle at 20% 50%, rgba(255, 102, 204, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(153, 51, 255, 0.05) 0%, transparent 50%),
-                linear-gradient(90deg, rgba(255, 102, 204, 0.03) 1px, transparent 1px),
-                linear-gradient(rgba(255, 102, 204, 0.03) 1px, transparent 1px);
+                radial-gradient(circle at 20% 50%, rgba(0, 176, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 102, 255, 0.05) 0%, transparent 50%),
+                linear-gradient(90deg, rgba(0, 176, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(rgba(0, 176, 255, 0.03) 1px, transparent 1px);
             background-size: 40px 40px; 
             pointer-events: none; 
             z-index: -1;
@@ -69,8 +70,8 @@
         .brand {
             font-family: 'Orbitron', sans-serif;
             font-size: 1rem;
-            color: var(--female-color);
-            text-shadow: 0 0 10px var(--female-color);
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary);
             letter-spacing: 1px;
             display: flex;
             align-items: center;
@@ -80,20 +81,26 @@
         .owner-badge {
             font-size: 0.65rem;
             padding: 2px 6px;
-            background: rgba(255, 51, 102, 0.2);
+            background: rgba(0, 136, 255, 0.2);
             border: 1px solid var(--accent);
             border-radius: 12px;
-            color: #ffaacc;
+            color: #aaccff;
             font-weight: 600;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
         }
 
         .status-badge {
             font-size: 0.7rem; 
             padding: 3px 6px;
-            border: 1px solid var(--female-color); 
-            color: var(--female-color);
+            border: 1px solid var(--primary); 
+            color: var(--primary);
             border-radius: 4px; 
-            background: rgba(255, 102, 204, 0.1);
+            background: rgba(0, 176, 255, 0.1);
             text-transform: uppercase; 
             font-weight: bold;
             display: flex; 
@@ -104,13 +111,27 @@
         .status-dot {
             width: 6px; 
             height: 6px; 
-            background: var(--female-color);
+            background: var(--primary);
             border-radius: 50%; 
-            box-shadow: 0 0 5px var(--female-color);
+            box-shadow: 0 0 5px var(--primary);
             animation: pulse 2s infinite;
         }
 
-        /* --- AVATAR (Female Style) --- */
+        .settings-btn {
+            background: rgba(0, 176, 255, 0.1);
+            border: 1px solid var(--border);
+            color: var(--primary);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        /* --- AVATAR (Female but Blue Theme) --- */
         .avatar-container {
             flex-shrink: 0; 
             display: flex; 
@@ -123,13 +144,13 @@
         .avatar-ring {
             width: 90px; 
             height: 90px; 
-            border: 2px solid var(--female-color);
+            border: 2px solid var(--primary);
             border-radius: 50%; 
             position: relative;
             display: flex; 
             justify-content: center; 
             align-items: center;
-            box-shadow: 0 0 30px rgba(255, 102, 204, 0.3);
+            box-shadow: 0 0 30px rgba(0, 176, 255, 0.3);
             animation: breathe 4s ease-in-out infinite;
         }
 
@@ -145,11 +166,11 @@
         .face-structure {
             width: 65px; 
             height: 65px;
-            background: radial-gradient(circle, rgba(255, 102, 204, 0.3), #000);
+            background: radial-gradient(circle, rgba(0, 176, 255, 0.3), #000);
             border-radius: 40% 40% 50% 50%; 
             position: relative;
-            border: 1px solid var(--female-color);
-            box-shadow: inset 0 0 20px rgba(255, 102, 204, 0.4);
+            border: 1px solid var(--primary);
+            box-shadow: inset 0 0 20px rgba(0, 176, 255, 0.4);
             overflow: hidden;
         }
 
@@ -164,9 +185,9 @@
         .eye {
             width: 14px; 
             height: 4px; 
-            background-color: var(--female-color);
+            background-color: var(--primary);
             border-radius: 50% 50% 0 0; 
-            box-shadow: 0 0 10px var(--female-color);
+            box-shadow: 0 0 10px var(--primary);
             animation: blink 4s infinite;
         }
 
@@ -184,7 +205,7 @@
         .bar {
             width: 2px; 
             height: 2px; 
-            background: var(--female-color);
+            background: var(--primary);
             border-radius: 1px; 
             transition: height 0.1s;
         }
@@ -214,34 +235,34 @@
         
         .msg.ai {
             align-self: flex-start; 
-            background: rgba(255, 102, 204, 0.15);
-            border: 1px solid var(--female-color); 
+            background: rgba(0, 176, 255, 0.15);
+            border: 1px solid var(--primary); 
             border-top-left-radius: 0; 
-            color: #ffe6f2;
+            color: #e6f7ff;
         }
         
         .msg.user {
             align-self: flex-end; 
-            background: rgba(153, 51, 255, 0.2);
-            border: 1px solid rgba(153, 51, 255, 0.5); 
+            background: rgba(0, 102, 255, 0.2);
+            border: 1px solid rgba(0, 102, 255, 0.5); 
             border-top-right-radius: 0;
             color: #fff; 
             text-align: right;
         }
         
         .msg strong { 
-            color: var(--female-color); 
+            color: var(--primary); 
             font-weight: 700; 
         }
         
         .msg em {
             font-style: italic;
-            color: #ffccff;
+            color: #aaccff;
         }
         
         .msg del {
             text-decoration: line-through;
-            color: #ff9999;
+            color: #99ccff;
         }
         
         .msg pre { 
@@ -257,7 +278,7 @@
         
         .msg code { 
             font-family: 'Courier New', monospace; 
-            color: #ff66ff; 
+            color: #66ccff; 
             background: rgba(0,0,0,0.3);
             padding: 2px 4px;
             border-radius: 3px;
@@ -274,7 +295,7 @@
 
         .preview-container {
             font-size: 0.75rem; 
-            color: var(--female-color);
+            color: var(--primary);
             margin-bottom: 6px; 
             padding-left: 5px;
             display: flex; 
@@ -302,14 +323,14 @@
         }
         
         .chat-input:focus { 
-            border-color: var(--female-color); 
-            box-shadow: 0 0 15px rgba(255, 102, 204, 0.15); 
+            border-color: var(--primary); 
+            box-shadow: 0 0 15px rgba(0, 176, 255, 0.15); 
         }
 
         .btn {
-            background: rgba(255, 102, 204, 0.1); 
-            border: 1px solid var(--female-color);
-            color: var(--female-color); 
+            background: rgba(0, 176, 255, 0.1); 
+            border: 1px solid var(--primary);
+            color: var(--primary); 
             width: 40px; 
             height: 40px; 
             border-radius: 50%;
@@ -325,7 +346,7 @@
         
         .btn:active { 
             transform: scale(0.95); 
-            background: rgba(255, 102, 204, 0.2); 
+            background: rgba(0, 176, 255, 0.2); 
         }
         
         .btn.listening { 
@@ -345,7 +366,7 @@
 
         .typing-indicator { 
             font-size: 0.7rem; 
-            color: var(--female-color); 
+            color: var(--primary); 
             margin-left: 15px; 
             margin-bottom: 3px; 
             opacity: 0; 
@@ -356,7 +377,7 @@
             animation: pulse 1s infinite; 
         }
         
-        #fileInput, #cameraInput { 
+        #fileInput { 
             display: none; 
         }
 
@@ -366,18 +387,18 @@
             gap: 6px;
             padding: 6px 12px;
             overflow-x: auto;
-            border-bottom: 1px solid rgba(255, 102, 204, 0.1);
+            border-bottom: 1px solid rgba(0, 176, 255, 0.1);
             background: rgba(0, 0, 0, 0.3);
             flex-shrink: 0;
         }
         
         .suggestion-chip {
             padding: 5px 10px;
-            background: rgba(255, 102, 204, 0.1);
+            background: rgba(0, 176, 255, 0.1);
             border: 1px solid var(--border);
             border-radius: 15px;
             font-size: 0.75rem;
-            color: var(--female-color);
+            color: var(--primary);
             white-space: nowrap;
             cursor: pointer;
             transition: all 0.2s;
@@ -385,41 +406,139 @@
         }
         
         .suggestion-chip:active { 
-            background: rgba(255, 102, 204, 0.2);
+            background: rgba(0, 176, 255, 0.2);
         }
 
-        /* --- IMAGE PREVIEW --- */
-        .image-preview {
-            max-width: 150px;
-            max-height: 150px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            margin-top: 5px;
-            display: block;
-        }
-
-        /* --- BUTTON GROUP --- */
-        .button-group {
+        /* --- FILE UPLOAD BUTTONS --- */
+        .upload-buttons {
             display: flex;
-            gap: 6px;
+            gap: 8px;
             margin-bottom: 8px;
         }
 
-        .file-btn, .camera-btn {
+        .upload-btn {
             flex: 1;
-            padding: 8px 12px;
-            background: rgba(255, 102, 204, 0.1);
+            padding: 10px;
+            background: rgba(0, 176, 255, 0.1);
             border: 1px solid var(--border);
             border-radius: 10px;
-            color: var(--female-color);
+            color: var(--primary);
             font-size: 0.8rem;
-            cursor: pointer;
             text-align: center;
+            cursor: pointer;
             transition: all 0.2s;
         }
 
-        .file-btn:active, .camera-btn:active {
-            background: rgba(255, 102, 204, 0.2);
+        .upload-btn:active {
+            background: rgba(0, 176, 255, 0.2);
+        }
+
+        /* --- MODALS --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--bg-panel);
+            border-radius: 15px;
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .modal-title {
+            color: var(--primary);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- VOICE SELECTION --- */
+        .voice-option {
+            background: rgba(0, 176, 255, 0.1);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .voice-option:hover {
+            background: rgba(0, 176, 255, 0.2);
+        }
+
+        .voice-option.selected {
+            background: rgba(0, 176, 255, 0.3);
+            border-color: var(--primary);
+        }
+
+        .voice-name {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        .voice-details {
+            font-size: 0.7rem;
+            color: #aaa;
+            margin-top: 3px;
+        }
+
+        .voice-controls {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .voice-test-btn, .voice-select-btn {
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 0.7rem;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .voice-test-btn {
+            background: rgba(0, 176, 255, 0.2);
+            color: var(--primary);
+        }
+
+        .voice-select-btn {
+            background: var(--primary);
+            color: #fff;
         }
 
         /* --- ANIMATIONS --- */
@@ -461,13 +580,13 @@
         
         @keyframes pulseRed { 
             0% { 
-                box-shadow: 0 0 0 0 rgba(255, 51, 102, 0.4); 
+                box-shadow: 0 0 0 0 rgba(0, 136, 255, 0.4); 
             } 
             70% { 
-                box-shadow: 0 0 0 8px rgba(255, 51, 102, 0); 
+                box-shadow: 0 0 0 8px rgba(0, 136, 255, 0); 
             } 
             100% { 
-                box-shadow: 0 0 0 0 rgba(255, 51, 102, 0); 
+                box-shadow: 0 0 0 0 rgba(0, 136, 255, 0); 
             } 
         }
         
@@ -517,10 +636,15 @@
 
     <header>
         <div class="brand">
-            💁 FTGAMERV2 AI <span class="owner-badge">@FTGAMERV2</span>
+            FTGAMERV2 AI <span class="owner-badge">@FTGAMERV2</span>
         </div>
-        <div class="status-badge">
-            <div class="status-dot"></div> <span id="systemStatus">ONLINE</span>
+        <div class="header-controls">
+            <div class="status-badge">
+                <div class="status-dot"></div> <span id="systemStatus">ONLINE</span>
+            </div>
+            <button class="settings-btn" onclick="showVoiceModal()" title="Voice Settings">
+                ⚙️
+            </button>
         </div>
     </header>
 
@@ -542,21 +666,21 @@
     <div class="suggestions">
         <div class="suggestion-chip" onclick="quickCommand('Hello, how are you?')">Hello</div>
         <div class="suggestion-chip" onclick="quickCommand('What time is it?')">Time</div>
-        <div class="suggestion-chip" onclick="quickCommand('I need help with something')">Help</div>
+        <div class="suggestion-chip" onclick="quickCommand('I need help')">Help</div>
         <div class="suggestion-chip" onclick="quickCommand('Tell me a joke')">Joke</div>
-        <div class="suggestion-chip" onclick="quickCommand('Scan my homework')">Scan</div>
+        <div class="suggestion-chip" onclick="quickCommand('Scan this image')">Scan</div>
     </div>
 
     <div class="chat-area" id="chatContainer">
         <div class="msg ai">
-            <strong>💁 AI ASSISTANT:</strong> Online & Ready!<br>
-            Hello! I'm <strong>Luna</strong>, your AI assistant. <span style="color:var(--female-color)">(Female Voice)</span><br>
+            <strong>🤖 AI ASSISTANT:</strong> Online & Ready!<br>
+            Hello! I'm <strong>Luna</strong>, your AI assistant. <span style="color:var(--primary)">(Female Voice)</span><br>
             I can help you with: <br>
-            • 📸 <strong>Camera scanning</strong> (live camera support)<br>
             • 📁 <strong>File uploads</strong> (images, PDFs, documents)<br>
             • 💬 <strong>Chat in English or Hinglish</strong><br>
-            • 🔊 <strong>Voice responses</strong> (complete sentences)<br><br>
-            How can I help you today?
+            • 🔊 <strong>Custom voice selection</strong><br>
+            • 🔍 <strong>Image analysis</strong><br><br>
+            Upload a file or ask me anything!
         </div>
     </div>
     
@@ -564,20 +688,19 @@
 
     <div class="input-wrapper">
         <!-- File Upload Buttons -->
-        <div class="button-group">
-            <button class="file-btn" onclick="document.getElementById('fileInput').click()">
+        <div class="upload-buttons">
+            <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
                 📁 Upload File
             </button>
-            <button class="camera-btn" onclick="startCamera()">
-                📸 Live Camera
+            <button class="upload-btn" onclick="startCamera()">
+                📸 Open Camera
             </button>
         </div>
         
         <div class="preview-container" id="previewContainer"></div>
         
         <div class="input-container">
-            <input type="file" id="fileInput" accept="image/*, .txt, .pdf, .jpg, .jpeg, .png, .doc, .docx">
-            <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none">
+            <input type="file" id="fileInput" accept="image/*, .txt, .pdf, .jpg, .jpeg, .png, .doc, .docx" onchange="handleFileUpload(this.files)">
             
             <input type="text" class="chat-input" id="messageInput" placeholder="Type your message or use camera..." autocomplete="off">
             
@@ -591,12 +714,30 @@
         </div>
     </div>
 
+    <!-- Voice Selection Modal -->
+    <div id="voiceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">🎵 Voice Selection</div>
+                <button class="close-btn" onclick="closeVoiceModal()">×</button>
+            </div>
+            <div id="voiceList">
+                <p style="color:#aaa; font-size:0.8rem; margin-bottom:15px;">
+                    Select a voice and test it. Your choice will be saved.
+                </p>
+                <div id="voicesContainer">
+                    <!-- Voices will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Camera Modal -->
-    <div id="cameraModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:1000; display:flex; flex-direction:column; justify-content:center; align-items:center;">
-        <div style="width:90%; max-width:500px; background:var(--bg-panel); border-radius:15px; padding:20px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                <h3 style="color:var(--female-color);">📸 Live Camera</h3>
-                <button onclick="closeCamera()" style="background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer;">×</button>
+    <div id="cameraModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">📸 Live Camera</div>
+                <button class="close-btn" onclick="closeCamera()">×</button>
             </div>
             <video id="cameraFeed" autoplay playsinline style="width:100%; border-radius:10px; border:2px solid var(--border);"></video>
             <div style="display:flex; gap:10px; margin-top:15px;">
@@ -622,6 +763,8 @@
         const systemStatus = document.getElementById('systemStatus');
         const cameraModal = document.getElementById('cameraModal');
         const cameraFeed = document.getElementById('cameraFeed');
+        const voiceModal = document.getElementById('voiceModal');
+        const voicesContainer = document.getElementById('voicesContainer');
         
         let selectedFile = null;
         let isProcessing = false;
@@ -631,46 +774,159 @@
         let mouthInterval;
         let voiceEnabled = true;
         let cameraStream = null;
+        let selectedVoice = null;
 
-        // --- CAMERA FUNCTIONS ---
+        // --- LOAD SAVED VOICE ---
+        function loadSavedVoice() {
+            const savedVoice = localStorage.getItem('ftg_selected_voice');
+            if (savedVoice) {
+                selectedVoice = JSON.parse(savedVoice);
+            }
+        }
+
+        // --- VOICE SELECTION MODAL ---
+        function showVoiceModal() {
+            voiceModal.style.display = 'flex';
+            loadVoices();
+        }
+
+        function closeVoiceModal() {
+            voiceModal.style.display = 'none';
+        }
+
+        function loadVoices() {
+            const voices = window.speechSynthesis.getVoices();
+            voicesContainer.innerHTML = '';
+            
+            if (voices.length === 0) {
+                voicesContainer.innerHTML = '<p style="color:#ff6666; text-align:center;">No voices available. Try refreshing the page.</p>';
+                return;
+            }
+            
+            voices.forEach((voice, index) => {
+                const voiceDiv = document.createElement('div');
+                voiceDiv.className = 'voice-option';
+                if (selectedVoice && voice.name === selectedVoice.name) {
+                    voiceDiv.classList.add('selected');
+                }
+                
+                voiceDiv.innerHTML = `
+                    <div class="voice-name">${voice.name}</div>
+                    <div class="voice-details">${voice.lang} • ${voice.default ? 'Default' : ''}</div>
+                    <div class="voice-controls">
+                        <button class="voice-test-btn" onclick="testVoice('${voice.name}')">Test</button>
+                        <button class="voice-select-btn" onclick="selectVoice('${voice.name}')">Select</button>
+                    </div>
+                `;
+                
+                voicesContainer.appendChild(voiceDiv);
+            });
+        }
+
+        function testVoice(voiceName) {
+            const voices = window.speechSynthesis.getVoices();
+            const voice = voices.find(v => v.name === voiceName);
+            
+            if (voice) {
+                const utterance = new SpeechSynthesisUtterance("Hello! This is a test of my voice. How do I sound?");
+                utterance.voice = voice;
+                utterance.rate = 0.95;
+                utterance.pitch = 1.2;
+                utterance.volume = 1.0;
+                
+                // Stop any ongoing speech
+                if (window.speechSynthesis.speaking) {
+                    window.speechSynthesis.cancel();
+                }
+                
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function selectVoice(voiceName) {
+            const voices = window.speechSynthesis.getVoices();
+            const voice = voices.find(v => v.name === voiceName);
+            
+            if (voice) {
+                selectedVoice = voice;
+                localStorage.setItem('ftg_selected_voice', JSON.stringify({
+                    name: voice.name,
+                    lang: voice.lang
+                }));
+                
+                // Update UI
+                document.querySelectorAll('.voice-option').forEach(el => {
+                    el.classList.remove('selected');
+                });
+                event.target.closest('.voice-option').classList.add('selected');
+                
+                addMessage(`<strong>🎵 VOICE SET:</strong> ${voice.name}`, false);
+                speak("Voice changed successfully!");
+            }
+        }
+
+        // --- CAMERA FUNCTIONS (FIXED) ---
         async function startCamera() {
             try {
+                // Request camera permission
                 cameraStream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: 'environment' },
+                    video: { 
+                        facingMode: 'environment',
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 }
+                    },
                     audio: false 
                 });
+                
                 cameraFeed.srcObject = cameraStream;
                 cameraModal.style.display = 'flex';
+                
+                // Add event listener for when video is ready
+                cameraFeed.onloadedmetadata = () => {
+                    cameraFeed.play();
+                };
+                
             } catch (err) {
+                console.error("Camera error:", err);
                 addMessage(`<strong>⚠️ CAMERA ERROR:</strong> ${err.message}<br>Please allow camera permissions.`, false);
             }
         }
 
         function capturePhoto() {
+            if (!cameraStream) return;
+            
             const canvas = document.createElement('canvas');
             canvas.width = cameraFeed.videoWidth;
             canvas.height = cameraFeed.videoHeight;
             const ctx = canvas.getContext('2d');
-            ctx.drawImage(cameraFeed, 0, 0);
             
+            // Draw video frame to canvas
+            ctx.drawImage(cameraFeed, 0, 0, canvas.width, canvas.height);
+            
+            // Convert to blob
             canvas.toBlob(function(blob) {
-                selectedFile = new File([blob], `camera_${Date.now()}.jpg`, { type: 'image/jpeg' });
-                
-                // Show preview
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    previewContainer.innerHTML = `
-                        <div style="display:flex; align-items:center; gap:8px;">
-                            <img src="${e.target.result}" style="width:30px; height:30px; border-radius:5px; border:1px solid var(--border);">
-                            <span style="font-size:0.7rem">📸 Camera Photo</span>
-                            <span style="cursor:pointer; color:#ff5555; margin-left:5px; font-weight:bold" onclick="clearFile()">✖</span>
-                        </div>
-                    `;
-                };
-                reader.readAsDataURL(blob);
-                
-                closeCamera();
-                addMessage(`<strong>📸 PHOTO CAPTURED:</strong> Ready for analysis!`, false);
+                if (blob) {
+                    selectedFile = new File([blob], `camera_${Date.now()}.jpg`, { type: 'image/jpeg' });
+                    
+                    // Show preview
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewContainer.innerHTML = `
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <img src="${e.target.result}" style="width:40px; height:40px; border-radius:5px; border:1px solid var(--border);">
+                                <div>
+                                    <div style="font-size:0.7rem; color:var(--primary)">📸 Camera Photo</div>
+                                    <div style="font-size:0.6rem; color:#aaa">Click to analyze</div>
+                                </div>
+                                <span style="cursor:pointer; color:#ff5555; margin-left:5px; font-weight:bold" onclick="clearFile()">✖</span>
+                            </div>
+                        `;
+                    };
+                    reader.readAsDataURL(blob);
+                    
+                    closeCamera();
+                    addMessage(`<strong>📸 PHOTO CAPTURED:</strong> Ready for analysis! Ask me to scan or describe it.`, false);
+                }
             }, 'image/jpeg', 0.8);
         }
 
@@ -682,6 +938,59 @@
             cameraModal.style.display = 'none';
         }
 
+        // --- FILE UPLOAD (FIXED) ---
+        function handleFileUpload(files) {
+            if (files.length > 0) {
+                selectedFile = files[0];
+                
+                // Show preview for images
+                if (selectedFile.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewContainer.innerHTML = `
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <img src="${e.target.result}" style="width:40px; height:40px; border-radius:5px; border:1px solid var(--border);">
+                                <div>
+                                    <div style="font-size:0.7rem; color:var(--primary)">📄 ${selectedFile.name}</div>
+                                    <div style="font-size:0.6rem; color:#aaa">${formatFileSize(selectedFile.size)}</div>
+                                </div>
+                                <span style="cursor:pointer; color:#ff5555; margin-left:5px; font-weight:bold" onclick="clearFile()">✖</span>
+                            </div>
+                        `;
+                    };
+                    reader.readAsDataURL(selectedFile);
+                    
+                    addMessage(`<strong>📁 FILE UPLOADED:</strong> ${selectedFile.name}<br>Ask me to scan, analyze, or describe it!`, false);
+                } else {
+                    previewContainer.innerHTML = `
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <div style="width:40px; height:40px; border-radius:5px; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; background:rgba(0,176,255,0.1);">
+                                📄
+                            </div>
+                            <div>
+                                <div style="font-size:0.7rem; color:var(--primary)">${selectedFile.name}</div>
+                                <div style="font-size:0.6rem; color:#aaa">${formatFileSize(selectedFile.size)}</div>
+                            </div>
+                            <span style="cursor:pointer; color:#ff5555; margin-left:5px; font-weight:bold" onclick="clearFile()">✖</span>
+                        </div>
+                    `;
+                    addMessage(`<strong>📁 FILE UPLOADED:</strong> ${selectedFile.name}`, false);
+                }
+            }
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+            else return (bytes / 1048576).toFixed(1) + ' MB';
+        }
+
+        window.clearFile = function() {
+            selectedFile = null;
+            fileInput.value = '';
+            previewContainer.innerHTML = '';
+        };
+
         // --- QUICK COMMANDS ---
         window.quickCommand = function(command) {
             messageInput.value = command;
@@ -690,73 +999,28 @@
 
         const commandShortcuts = {
             '/clear': () => {
-                chatContainer.innerHTML = '<div class="msg ai"><strong>💁 LUNA:</strong> Chat cleared!</div>';
+                chatContainer.innerHTML = '<div class="msg ai"><strong>🤖 LUNA:</strong> Chat cleared!</div>';
                 conversationHistory = [];
             },
             '/help': () => {
-                addMessage(`<strong>💁 LUNA'S COMMANDS:</strong><br>
+                addMessage(`<strong>🤖 LUNA'S COMMANDS:</strong><br>
                 • <code>/clear</code> - Clear chat<br>
                 • <code>/help</code> - Show help<br>
-                • <code>/voice on/off</code> - Toggle voice<br>
-                • <code>/scan</code> - Scan uploaded image<br>
+                • <code>/voice</code> - Voice selection<br>
                 • <code>/camera</code> - Open camera<br>
-                • <code>/translate</code> - Translate text`, false);
+                • <code>/scan</code> - Scan uploaded file`, false);
             },
-            '/voice': (arg) => {
-                if (arg === 'off') {
-                    voiceEnabled = false;
-                    addMessage(`<strong>💁 LUNA:</strong> Voice disabled`, false);
-                } else {
-                    voiceEnabled = true;
-                    addMessage(`<strong>💁 LUNA:</strong> Voice enabled`, false);
-                    speak("Voice enabled. I'm ready to speak!");
-                }
-            },
+            '/voice': () => showVoiceModal(),
             '/camera': () => startCamera(),
             '/scan': () => {
                 if (selectedFile) {
-                    addMessage(`<strong>💁 LUNA:</strong> Scanning ${selectedFile.name}...`, false);
+                    addMessage(`<strong>🤖 LUNA:</strong> Scanning ${selectedFile.name}...`, false);
+                    messageInput.value = `Analyze this ${selectedFile.type.startsWith('image/') ? 'image' : 'file'}`;
                     sendMessage();
                 } else {
-                    addMessage(`<strong>💁 LUNA:</strong> Please upload or take a photo first`, false);
+                    addMessage(`<strong>🤖 LUNA:</strong> Please upload or take a photo first`, false);
                 }
             }
-        };
-
-        // --- FILE HANDLING ---
-        fileInput.addEventListener('change', async (e) => {
-            if (e.target.files.length > 0) {
-                selectedFile = e.target.files[0];
-                
-                // Show preview
-                if (selectedFile.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        previewContainer.innerHTML = `
-                            <div style="display:flex; align-items:center; gap:8px;">
-                                <img src="${e.target.result}" style="width:30px; height:30px; border-radius:5px; border:1px solid var(--border);">
-                                <span style="font-size:0.7rem">📄 ${selectedFile.name}</span>
-                                <span style="cursor:pointer; color:#ff5555; margin-left:5px; font-weight:bold" onclick="clearFile()">✖</span>
-                            </div>
-                        `;
-                    };
-                    reader.readAsDataURL(selectedFile);
-                    
-                    addMessage(`<strong>💁 LUNA:</strong> File uploaded: ${selectedFile.name}<br>Ask me to scan or analyze it!`, false);
-                } else {
-                    previewContainer.innerHTML = `
-                        <span style="font-size:0.7rem">📄 ${selectedFile.name}</span>
-                        <span style="cursor:pointer; color:#ff5555; margin-left:5px; font-weight:bold" onclick="clearFile()">✖</span>
-                    `;
-                    addMessage(`<strong>💁 LUNA:</strong> Document uploaded: ${selectedFile.name}`, false);
-                }
-            }
-        });
-
-        window.clearFile = function() {
-            selectedFile = null;
-            fileInput.value = '';
-            previewContainer.innerHTML = '';
         };
 
         // --- UI UTILITIES ---
@@ -796,7 +1060,7 @@
             }, 10);
         }
 
-        // --- VOICE SYSTEM FIXED (FEMALE VOICE, NO CUTTING) ---
+        // --- VOICE SYSTEM (FIXED) ---
         function speak(text) {
             if (!window.speechSynthesis || !voiceEnabled || !text || text.trim().length < 3) return;
             
@@ -804,17 +1068,16 @@
             window.speechSynthesis.cancel();
             animateMouth(false);
             
-            // Split into sentences for better flow
+            // Split into sentences
             const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
             
-            // Clear queue and speak each sentence with delay
+            // Clear queue
             speechQueue = [];
             isSpeaking = false;
             
             sentences.forEach((sentence, index) => {
                 const trimmed = sentence.trim();
                 if (trimmed.length > 2) {
-                    // Add delay between sentences
                     speechQueue.push({ text: trimmed, delay: index * 800 });
                 }
             });
@@ -835,35 +1098,26 @@
             setTimeout(() => {
                 const utterance = new SpeechSynthesisUtterance(item.text.substring(0, 300));
                 
-                // FEMALE VOICE SETTINGS
-                const voices = window.speechSynthesis.getVoices();
-                
-                // Prefer female voices (Indian or US)
-                const femaleVoices = voices.filter(v => 
-                    v.name.includes('Female') || 
-                    v.name.includes('Woman') || 
-                    v.name.includes('Samantha') ||
-                    v.name.includes('Google UK English Female') ||
-                    v.name.includes('Microsoft Zira Desktop') ||
-                    (v.lang.includes('IN') && v.name.toLowerCase().includes('female'))
-                );
-                
-                // Fallback to any female-sounding voice
-                if (femaleVoices.length > 0) {
-                    utterance.voice = femaleVoices[0];
+                // Use selected voice or default female
+                if (selectedVoice) {
+                    const voices = window.speechSynthesis.getVoices();
+                    const voice = voices.find(v => v.name === selectedVoice.name);
+                    if (voice) utterance.voice = voice;
                 } else {
-                    // Try to find any non-male voice
-                    const nonMale = voices.filter(v => 
-                        !v.name.includes('Male') && 
-                        !v.name.includes('Man') && 
-                        !v.name.includes('David')
+                    // Default female voice
+                    const voices = window.speechSynthesis.getVoices();
+                    const femaleVoices = voices.filter(v => 
+                        v.name.includes('Female') || 
+                        v.name.includes('Woman') || 
+                        v.name.includes('Samantha') ||
+                        v.name.includes('Zira')
                     );
-                    if (nonMale.length > 0) utterance.voice = nonMale[0];
+                    if (femaleVoices.length > 0) utterance.voice = femaleVoices[0];
                 }
                 
-                // Natural female voice settings
+                // Female voice settings
                 utterance.rate = 0.95;
-                utterance.pitch = 1.2; // Higher pitch for female voice
+                utterance.pitch = 1.2;
                 utterance.volume = 1.0;
                 utterance.lang = 'en-IN';
                 
@@ -932,7 +1186,7 @@
                 addMessage(`📎 [File: ${selectedFile.name}]`, true);
             }
             
-            // Prepare form data with camera/image context
+            // Prepare form data
             const formData = new FormData();
             if (text) formData.append('text', text);
             if (selectedFile) {
@@ -940,11 +1194,9 @@
                 formData.append('file_type', selectedFile.type);
             }
             
-            // Add context for better responses
+            // Add context
             formData.append('assistant_name', 'Luna');
-            formData.append('assistant_gender', 'female');
             formData.append('language', 'english');
-            formData.append('user_context', 'User may upload homework, documents, or images for analysis');
             
             // Clear input
             messageInput.value = '';
@@ -952,7 +1204,7 @@
             showTyping();
             
             try {
-                // Try enhanced endpoint first
+                // Try enhanced endpoint
                 const res = await fetch('https://bj-tricks-ai.vercel.app/chat-enhanced', {
                     method: 'POST',
                     body: formData
@@ -974,16 +1226,10 @@
                 
                 let responseText = data.result || data.error || "I didn't understand that. Can you rephrase?";
                 
-                // Make sure response is complete (add if cut off)
+                // Make sure response is complete
                 if (responseText.length < 50 && !responseText.endsWith('.') && !responseText.endsWith('?') && !responseText.endsWith('!')) {
                     responseText += ". Is there anything else I can help you with?";
                 }
-                
-                // Add female perspective
-                responseText = responseText.replace(/I am/g, "I'm")
-                                          .replace(/I can/g, "I can")
-                                          .replace(/kar sakta/g, "kar sakti")
-                                          .replace(/hoon/g, "hoon");
                 
                 // Display response
                 addMessage(responseText, false);
@@ -1070,17 +1316,17 @@
         // Auto-focus
         setTimeout(() => messageInput.focus(), 500);
         
-        // Initialize voices
+        // Initialize voices and load saved voice
         if (window.speechSynthesis) {
             window.speechSynthesis.onvoiceschanged = () => {
-                // Voices loaded
+                loadSavedVoice();
             };
         }
         
-        // Welcome message with female voice
+        // Welcome message (NO CAMERA POPUP)
         setTimeout(() => {
             if (voiceEnabled) {
-                speak("Hello! I'm Luna, your AI assistant. I'm here to help you with camera scanning, file uploads, and answering questions. How can I assist you today?");
+                speak("Hello! I'm Luna, your AI assistant. I'm here to help you with file uploads, camera scanning, and answering questions. How can I assist you today?");
             }
         }, 1500);
         
